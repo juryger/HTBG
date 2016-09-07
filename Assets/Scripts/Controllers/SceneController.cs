@@ -1,19 +1,23 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
-
-public class SceneController : BaseController
+﻿public class SceneController : BaseController
 {
-    public ScenModel Model { get; private set; }
+    public SceneModel Model { get; private set; }
 
-    public SceneController(IView view, ScenModel model) : base(view)
+    public SceneController(IView view, SceneModel model) :
+        base(view, model)
     {
         Model = model;
         Model.SetController(this);
+
+        Notify(ControllerNotification.SyncViewState, this, Model.Player.Health, Model.Player.Stamina);
     }
 
     public override void Notify(string eventPath, object source, params object[] data)
     {
-        throw new NotImplementedException();
+        switch (eventPath)
+        {
+            case ControllerNotification.SyncViewState:
+                View.Notify(ControllerNotification.SyncViewState, this, data);
+                break;
+        }
     }
 }

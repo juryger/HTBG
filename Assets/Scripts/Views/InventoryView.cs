@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// Unity script for inventory window.
@@ -27,18 +26,8 @@ public class InventoryView : MonoBehaviour, IView
         Controller = controller;
     }
 
-    public void SyncState()
+    public void Dispose()
     {
-        throw new NotImplementedException();
-    }
-
-    // Use this for initialization
-    void Start () {
-    
-    }
-    
-    // Update is called once per frame
-    void Update () {
-    
+        Controller = null;
     }
 }

@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// Unity script for player object.
@@ -41,7 +40,7 @@ public class PlayerView : MonoBehaviour, IView
         else
         {
             anim.SetBool("iswalking", false);
-        }        
+        }
     }
 
     public BaseController Controller { get; private set; }
@@ -55,17 +54,17 @@ public class PlayerView : MonoBehaviour, IView
     {
         switch (eventPath)
         {
-            case ControllerNotification.GameObjectPositionChanged:
+            case ControllerNotification.PlayerPositionChanged:
                 var x = (float)data[0];
                 var y = (float)data[1];
                 var z = (float)data[2];
                 transform.position = new Vector3(x, y, z);
                 break;
-            case ControllerNotification.GameObjectMovementVectorChanged:
+            case ControllerNotification.PlayerMovementVectorChanged:
                 inputX = (float)data[0];
-                inputY = (float)data[1];        
+                inputY = (float)data[1];
                 break;
-            case ControllerNotification.GameObjectMovementHalted:
+            case ControllerNotification.PlayerMovementHaulted:
                 inputX = 0f;
                 inputY = 0f;
                 break;
@@ -82,8 +81,8 @@ public class PlayerView : MonoBehaviour, IView
         Controller = controller;
     }
 
-    public void SyncState()
+    public void Dispose()
     {
-        throw new NotImplementedException();
+        Controller = null;
     }
 }

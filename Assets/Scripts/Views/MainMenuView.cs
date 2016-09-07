@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 /// <summary>
@@ -32,8 +29,8 @@ public class MainMenuView : MonoBehaviour, IView
         Controller = controller;
     }
 
-    public void SyncState()
+    public void Dispose()
     {
-        throw new NotImplementedException();
+        Controller = null;
     }
 }

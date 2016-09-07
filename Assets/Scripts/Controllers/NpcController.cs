@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 public class NpcController : BaseController
 {
     public NpcModel Model { get; private set; }
 
-    public NpcController(IView view, NpcModel model) : base(view)
+    public NpcController(IView view, NpcModel model) :
+        base(view, model)
     {
         Model = model;
         Model.SetController(this);

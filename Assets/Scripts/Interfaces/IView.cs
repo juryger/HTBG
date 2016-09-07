@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 /// <summary>
 /// General interface for view (MVC).
 /// </summary>
-public interface IView
+public interface IView : IDisposable
 {
     /// <summary>
     /// Set controller for view.
@@ -21,16 +17,4 @@ public interface IView
     /// <param name="source">source of event</param>
     /// <param name="data">parameters of event</param>
     void Notify(string eventPath, object source, params object[] data);
-
-    /// <summary>
-    /// Handle event notification from View or Model.
-    /// </summary>
-    /// <param name="viewDataPath">view data identifier</param>
-    /// <returns>array of data</returns>
-    object[] GetViewData(string viewDataPath);
-
-    /// <summary>
-    /// Inforce view to sync state with model.
-    /// </summary>
-    void SyncState();
 }

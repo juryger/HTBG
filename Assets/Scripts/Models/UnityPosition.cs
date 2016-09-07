@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 /// <summary>
 /// Represent Unity position on the scene.
 /// </summary>
+[Serializable]
 public class UnityPosition
 {
     public float X { get; private set; }

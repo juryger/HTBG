@@ -1,14 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System;
 
 /// <summary>
 /// Base class for all objects in the game.
 /// </summary>
-public abstract class ThingModel: IModel
+[Serializable]
+public abstract class ThingModel : BaseModel
 {
     protected string internalKey;
-    public BaseController Controller { get; private set; }
 
     public ThingModel(string key, string name, string commandHint)
     {
@@ -36,21 +34,13 @@ public abstract class ThingModel: IModel
         get { return internalKey; }
     }
 
-    public void SetController(BaseController controller)
-    {
-        if (Controller != null)
-            throw new ApplicationException("Controller has been already initialized.");
-
-        Controller = controller;
-    }
-
     public void SetPosition(UnityPosition pos)
     {
         Position = pos;
 
         if (Controller != null)
         {
-            Controller.Notify(ControllerNotification.GameObjectPositionChanged, this, pos);
+            Controller.Notify(ControllerNotification.PlayerPositionChanged, this, pos);
         }
     }
 
@@ -61,9 +51,9 @@ public abstract class ThingModel: IModel
         if (Controller != null)
         {
             if (vector.X == 0 && vector.Y == 0)
-                Controller.Notify(ControllerNotification.GameObjectMovementHalted, this);
+                Controller.Notify(ControllerNotification.PlayerMovementHaulted, this);
             else
-                Controller.Notify(ControllerNotification.GameObjectMovementVectorChanged, this, vector);
+                Controller.Notify(ControllerNotification.PlayerMovementVectorChanged, this, vector);
         }
     }
 }

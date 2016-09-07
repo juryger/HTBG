@@ -1,11 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
-
-/// <summary>
+﻿/// <summary>
 /// Represent statistics of the character.
 /// </summary>
-public abstract class CharacterStatisticsModel: IModel
+public abstract class CharacterStatisticsModel : BaseModel
 {
     public CharacterStatisticsModel(int armorLevel, int damageLevel, int healthLevel, int health, int staminaLevel,
         float maxCarriedWeight, float carriedWeight)
@@ -17,8 +13,6 @@ public abstract class CharacterStatisticsModel: IModel
         MaxCarriedWeight = maxCarriedWeight;
         CarriedWeight = carriedWeight;
     }
-
-    public BaseController Controller { get; private set; }
 
     public int ArmorLevel { get; private set; }
 
@@ -35,12 +29,4 @@ public abstract class CharacterStatisticsModel: IModel
     public float MaxCarriedWeight { get; private set; }
 
     public float CarriedWeight { get; private set; }
-
-    public void SetController(BaseController controller)
-    {
-        if (Controller != null)
-            throw new ApplicationException("Controller has been already initialized.");
-
-        Controller = controller;
-    }
 }

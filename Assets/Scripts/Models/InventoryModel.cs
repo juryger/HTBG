@@ -1,11 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
-
-/// <summary>
+﻿/// <summary>
 /// Represent inventory store for characters of the game.
 /// </summary>
-public class InventoryModel: IModel
+public class InventoryModel : BaseModel
 {
     private int maxInventoryItems = 9;
 
@@ -15,22 +11,10 @@ public class InventoryModel: IModel
     }
 
     /// <summary>
-    /// Instance of controller
-    /// </summary>
-    public BaseController Controller { get; private set; }
-
-    /// <summary>
     /// Maximum nubmer of cells of inventory for placing items.
     /// </summary>
-    public int MaxInventoryItems {
-        get { return maxInventoryItems; }
-    }
-
-    public void SetController(BaseController controller)
+    public int MaxInventoryItems
     {
-        if (Controller != null)
-            throw new ApplicationException("Controller has been already initialized.");
-
-        Controller = controller;
+        get { return maxInventoryItems; }
     }
 }

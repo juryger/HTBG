@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 /// <summary>
 /// Model for main menu.
 /// </summary>
-public class MenuModel : IModel
+public class MenuModel : BaseModel
 {
     private Dictionary<string, MenuItem> items;
 
@@ -20,16 +18,6 @@ public class MenuModel : IModel
         items.Add(MenuItemName.Load, new MenuItem(MenuItemName.Load, "Load game", false));
         items.Add(MenuItemName.Save, new MenuItem(MenuItemName.Save, "Save game", false));
         items.Add(MenuItemName.Exit, new MenuItem(MenuItemName.Exit, "Exit game", true));
-    }
-
-    public BaseController Controller { get; private set; }
-
-    public void SetController(BaseController controller)
-    {
-        if (Controller != null)
-            throw new ApplicationException("Controller has been already initialized.");
-
-        Controller = controller;
     }
 
     public void UpdateMenuItem(string name, bool isVisible)

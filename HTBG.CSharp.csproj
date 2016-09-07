@@ -80,9 +80,10 @@
     <Compile Include="Assets\Scripts\CommandInputController.cs" />
     <Compile Include="Assets\Scripts\CommandProcessor.cs" />
     <Compile Include="Assets\Scripts\Const\ControllerNotification.cs" />
+    <Compile Include="Assets\Scripts\Const\GeneralName.cs" />
     <Compile Include="Assets\Scripts\Const\MenuItemName.cs" />
     <Compile Include="Assets\Scripts\Const\SceneName.cs" />
-    <Compile Include="Assets\Scripts\Const\ViewDataName.cs" />
+    <Compile Include="Assets\Scripts\Const\UnityObjectTagName.cs" />
     <Compile Include="Assets\Scripts\Controllers\BaseController.cs" />
     <Compile Include="Assets\Scripts\Controllers\GreyMilitiaEnemyController.cs" />
     <Compile Include="Assets\Scripts\Controllers\InventoryController.cs" />
@@ -94,10 +95,10 @@
     <Compile Include="Assets\Scripts\Controllers\SceneController.cs" />
     <Compile Include="Assets\Scripts\GameStateManager.cs" />
     <Compile Include="Assets\Scripts\Interfaces\ICharacterView.cs" />
-    <Compile Include="Assets\Scripts\Interfaces\IModel.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IPlayerView.cs" />
     <Compile Include="Assets\Scripts\Interfaces\ISceneView.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IView.cs" />
+    <Compile Include="Assets\Scripts\Models\BaseModel.cs" />
     <Compile Include="Assets\Scripts\Models\CharacterModel.cs" />
     <Compile Include="Assets\Scripts\Models\CharacterStatisticsModel.cs" />
     <Compile Include="Assets\Scripts\Models\EnemyModel.cs" />
@@ -115,10 +116,10 @@
     <Compile Include="Assets\Scripts\Models\ThingModel.cs" />
     <Compile Include="Assets\Scripts\Models\UnityPosition.cs" />
     <Compile Include="Assets\Scripts\Models\UnityVector2.cs" />
-    <Compile Include="Assets\Scripts\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\Singleton.cs" />
-    <Compile Include="Assets\Scripts\Tools\CameraFollow.cs" />
-    <Compile Include="Assets\Scripts\Tools\LoadNewArea.cs" />
+    <Compile Include="Assets\Scripts\Utilities\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\Utilities\GameSceneLoader.cs" />
+    <Compile Include="Assets\Scripts\Utilities\LoadNewArea.cs" />
     <Compile Include="Assets\Scripts\Views\GlobalMapView.cs" />
     <Compile Include="Assets\Scripts\Views\GreyMilitiaEnemyView.cs" />
     <Compile Include="Assets\Scripts\Views\InventoryView.cs" />
@@ -136,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Tiled2Unity\Imported\SkeletonInn.tiled2unity.xml" />
+    <None Include="Assets\Tiled2Unity\Imported\SkeletonInnSuburbs.tiled2unity.xml" />
     <None Include="Assets\Tiled2Unity\Imported\WorldMap.tiled2unity.xml" />
     <None Include="Assets\Tiled2Unity\Imported\_ReadMe.txt" />
     <None Include="Assets\Tiled2Unity\Imported\htbg.tiled2unity.xml" />

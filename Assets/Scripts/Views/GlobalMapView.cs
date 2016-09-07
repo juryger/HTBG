@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// Unity script for global map scene.
@@ -27,18 +26,8 @@ public class GlobalMapView : MonoBehaviour, IView
         Controller = controller;
     }
 
-    public void SyncState()
+    public void Dispose()
     {
-        throw new NotImplementedException();
+        Controller = null;
     }
-
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine.SceneManagement;
 
 public class CommandProcessor
@@ -15,7 +11,7 @@ public class CommandProcessor
 
         // tokenise the command
         pCmdStr = pCmdStr.ToLower();
-        var parts = pCmdStr.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+        var parts = pCmdStr.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         if (parts.Length <= 0)
         {
             display(strResult);
@@ -113,8 +109,18 @@ public class CommandProcessor
                 if (parts.Length == 1)
                     break;
 
-                GameStateManager.Instance.OnLoadScene(parts[1]);
-                SceneManager.LoadScene(parts[1]);
+                var sceneNumber = 0;
+                var sceneName = String.Empty;
+                if (int.TryParse(parts[1], out sceneNumber))
+                {
+                    if (sceneNumber == 1)
+                        sceneName = SceneName.SkeletonInn;
+                    else if (sceneNumber == 2)
+                        sceneName = SceneName.SkeletonInnSuburbs;
+                }
+
+                GameStateManager.Instance.InitializeScene(sceneName, GeneralName.DefaultSpawnPointName);
+                SceneManager.LoadScene(sceneName);
                 break;
             default:
                 break;

@@ -1,13 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
-
-public class MenuController: BaseController
+﻿public class MenuController : BaseController
 {
     public MenuModel Model { get; private set; }
 
     public MenuController(IView view, MenuModel model)
-        : base(view)
+        : base(view, model)
     {
         Model = model;
         Model.SetController(this);
@@ -15,7 +11,7 @@ public class MenuController: BaseController
 
     public override void Notify(string eventPath, object source, params object[] data)
     {
-        switch(eventPath)
+        switch (eventPath)
         {
             case ControllerNotification.MenuItemChanged:
                 var menuItem = data[0] as MenuItem;

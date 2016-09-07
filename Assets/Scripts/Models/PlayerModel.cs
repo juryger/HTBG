@@ -1,11 +1,10 @@
-﻿using UnityEngine;
-using System.Collections;
-
+﻿using System;
 /// <summary>
 /// Main character model.
 /// </summary>
+[Serializable]
 public class PlayerModel : CharacterModel
-{    
+{
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -13,7 +12,7 @@ public class PlayerModel : CharacterModel
     /// <param name="playerAge">age of the player</param>
     /// <param name="height">height of the player</param>
     /// <param name="weight">weight</param>
-    public PlayerModel(string name, int playerAge, int playerHeight, int playerWeight) : 
+    public PlayerModel(string name, int playerAge, int playerHeight, int playerWeight) :
         base(typeof(PlayerModel).ToString(), name, string.Empty)
     {
         PlayerAge = playerAge;
@@ -25,4 +24,27 @@ public class PlayerModel : CharacterModel
     public int PlayerAge { get; private set; }
     public int PlayerHeight { get; private set; }
     public int PlayerWeight { get; private set; }
+
+    public int Health { get; private set; }
+    public int Stamina { get; private set; }
+
+    public void SetHealth(int value)
+    {
+        Health = value;
+
+        if (Controller != null)
+        {
+            Controller.Notify(ControllerNotification.PlayerHealthChanged, this, value);
+        }
+    }
+
+    public void SetStamina(int value)
+    {
+        Stamina = value;
+
+        if (Controller != null)
+        {
+            Controller.Notify(ControllerNotification.PlayerStaminaChanged, this, value);
+        }
+    }
 }

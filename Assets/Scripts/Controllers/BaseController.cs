@@ -1,14 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-public abstract class BaseController
+[Serializable]
+public abstract class BaseController : IDisposable
 {
+    public BaseController(IView view, BaseModel model)
+    {
+        View = view;
+        Model = model;
+        View.SetController(this);
+    }
+
     /// <summary>
     /// Instance of View.
     /// </summary>
     public IView View { get; private set; }
+
+    /// <summary>
+    /// Instance of model.
+    /// </summary>
+    private BaseModel Model { get; set; }
 
     /// <summary>
     /// Handle event notification from View or Model.
@@ -18,10 +28,44 @@ public abstract class BaseController
     /// <param name="data">parameters of event</param>
     public abstract void Notify(string eventPath, Object source, params object[] data);
 
-    public BaseController(IView view)
-    {
-        View = view;
+    #region IDisposable Support
 
-        View.SetController(this);
+    protected bool disposedValue = false; // To detect redundant calls
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                View.Dispose();
+                View = null;
+
+                Model.Dispose();
+                Model = null;
+            }
+
+            // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+            // TODO: set large fields to null.
+
+            disposedValue = true;
+        }
     }
+
+    // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+    // ~BaseController() {
+    //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+    //   Dispose(false);
+    // }
+
+    // This code added to correctly implement the disposable pattern.
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        Dispose(true);
+        // TODO: uncomment the following line if the finalizer is overridden above.
+        // GC.SuppressFinalize(this);
+    }
+
+    #endregion
 }

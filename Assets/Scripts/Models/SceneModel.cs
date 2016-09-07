@@ -1,19 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
-
-/// <summary>
+﻿/// <summary>
 /// Represent scene of the game.
 /// </summary>
-public class ScenModel: IModel
+public class SceneModel : BaseModel
 {
-    public ScenModel(string name, string[] commandHints)
+    public SceneModel(string name, string[] commandHints)
     {
-        this.Name = name;
-        this.CommandHints = commandHints ?? new string[] { };
+        Name = name ?? string.Empty;
+        CommandHints = commandHints ?? new string[] { };
     }
-
-    public BaseController Controller { get; private set; }
 
     /// <summary>
     /// Name of the scene.
@@ -25,11 +19,11 @@ public class ScenModel: IModel
     /// </summary>
     public string[] CommandHints { get; private set; }
 
-    public void SetController(BaseController controller)
+    public PlayerModel Player
     {
-        if (Controller != null)
-            throw new ApplicationException("Controller has been already initialized.");
-
-        Controller = controller;
+        get
+        {
+            return GameStateManager.Instance.Player;
+        }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 public class PlayerStatController : BaseController
 {
     public PlayerStatisticsModel Model { get; private set; }
 
-    public PlayerStatController(IView view, PlayerStatisticsModel model) : base(view)
+    public PlayerStatController(IView view, PlayerStatisticsModel model) :
+        base(view, model)
     {
         Model = model;
         Model.SetController(this);

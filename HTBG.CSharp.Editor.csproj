@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Tiled2Unity\Imported\SkeletonInn.tiled2unity.xml" />
+    <None Include="Assets\Tiled2Unity\Imported\SkeletonInnSuburbs.tiled2unity.xml" />
     <None Include="Assets\Tiled2Unity\Imported\WorldMap.tiled2unity.xml" />
     <None Include="Assets\Tiled2Unity\Imported\_ReadMe.txt" />
     <None Include="Assets\Tiled2Unity\Imported\htbg.tiled2unity.xml" />

@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 public class InventoryController : BaseController
 {
     public InventoryModel Model { get; private set; }
 
-    public InventoryController(IView view, InventoryModel inventory) : base(view)
+    public InventoryController(IView view, InventoryModel model) :
+        base(view, model)
     {
-        Model = Model;
+        Model = model;
         Model.SetController(this);
     }
 
