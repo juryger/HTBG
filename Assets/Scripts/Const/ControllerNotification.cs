@@ -1,4 +1,4 @@
-﻿public class ControllerNotification
+﻿public class ViewModelNotification
 {
     public const string MenuItemChanged = "menu.item.changed";
     public const string SyncViewState = "sync.view.state";
@@ -16,7 +16,7 @@
 
     public const string CommandInputHit = "command.input.hit";
 
-    protected ControllerNotification()
+    protected ViewModelNotification()
     {
 
     }

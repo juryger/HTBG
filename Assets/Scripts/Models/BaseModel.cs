@@ -2,26 +2,26 @@
 
 
 /// <summary>
-/// General class for all models (MVC).
+/// General class for all models (MVVM).
 /// </summary>
 [Serializable]
 public abstract class BaseModel : IDisposable
 {
     /// <summary>
-    /// Controller for model.
+    /// ViewModel for Model.
     /// </summary>
-    public BaseController Controller { get; private set; }
+    public BaseViewModel ViewModel { get; private set; }
 
     /// <summary>
-    /// Set controller for model.
+    /// Set ViewModel for model.
     /// </summary>
-    /// <param name="controller">base controller</param>
-    public void SetController(BaseController controller)
+    /// <param name="viewModel">ViewModel</param>
+    public void SetViewModel(BaseViewModel viewModel)
     {
-        if (Controller != null)
-            throw new ApplicationException("Controller has been already initialized.");
+        if (ViewModel != null)
+            throw new ApplicationException("ViewModel has been already initialized.");
 
-        Controller = controller;
+        ViewModel = viewModel;
     }
 
     #region IDisposable Support
@@ -35,7 +35,7 @@ public abstract class BaseModel : IDisposable
             if (disposing)
             {
                 // dispose managed state (managed objects).
-                Controller = null;
+                ViewModel = null;
             }
 
             // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

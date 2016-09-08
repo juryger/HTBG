@@ -1,14 +1,14 @@
 ﻿using System;
 /// <summary>
-/// General interface for view (MVC).
+/// General interface for view (MVVM).
 /// </summary>
 public interface IView : IDisposable
 {
     /// <summary>
-    /// Set controller for view.
+    /// Set ViewModel for view.
     /// </summary>
-    /// <param name="controller">controller</param>
-    void SetController(BaseController controller);
+    /// <param name="viewModel">ViewModel</param>
+    void SetViewModel(BaseViewModel viewModel);
 
     /// <summary>
     /// Handle event notification from View or Model.

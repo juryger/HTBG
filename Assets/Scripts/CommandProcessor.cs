@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class CommandProcessor
 {
-    // todo: move to SceneController
+    // todo: move to SceneViewModel
 
     public void Parse(String pCmdStr, Action<string> display)
     {

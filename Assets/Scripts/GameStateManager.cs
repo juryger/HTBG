@@ -118,9 +118,9 @@ public class GameStateManager : Singleton<GameStateManager>
         ActiveSpawnPoint = spawnPoint;
 
         // note: for testing purpose
-        if (Player.Controller != null)
+        if (Player.ViewModel != null)
         {
-            Player.Controller.Dispose();
+            Player.ViewModel.Dispose();
 
             Player = new PlayerModel("Rumata Estorsky", 40, 185, 90);
         }

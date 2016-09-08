@@ -38,9 +38,9 @@ public abstract class ThingModel : BaseModel
     {
         Position = pos;
 
-        if (Controller != null)
+        if (ViewModel != null)
         {
-            Controller.Notify(ControllerNotification.PlayerPositionChanged, this, pos);
+            ViewModel.Notify(ViewModelNotification.PlayerPositionChanged, this, pos);
         }
     }
 
@@ -48,12 +48,12 @@ public abstract class ThingModel : BaseModel
     {
         MovementVector = vector;
 
-        if (Controller != null)
+        if (ViewModel != null)
         {
             if (vector.X == 0 && vector.Y == 0)
-                Controller.Notify(ControllerNotification.PlayerMovementHaulted, this);
+                ViewModel.Notify(ViewModelNotification.PlayerMovementHaulted, this);
             else
-                Controller.Notify(ControllerNotification.PlayerMovementVectorChanged, this, vector);
+                ViewModel.Notify(ViewModelNotification.PlayerMovementVectorChanged, this, vector);
         }
     }
 }

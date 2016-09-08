@@ -28,7 +28,7 @@ public class MenuModel : BaseModel
 
         items[name].IsVisible = isVisible;
 
-        if (Controller != null)
-            Controller.Notify(ControllerNotification.MenuItemChanged, this, items[name]);
+        if (ViewModel != null)
+            ViewModel.Notify(ViewModelNotification.MenuItemChanged, this, items[name]);
     }
 }

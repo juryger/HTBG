@@ -28,15 +28,15 @@ public class SceneView : MonoBehaviour, IView
     }
 
     /// <summary>
-    /// Controller name
+    /// ViewModel name
     /// </summary>
-    public BaseController Controller { get; private set; }
+    public BaseViewModel ViewModel { get; private set; }
 
     public void Notify(string eventPath, object source, params object[] data)
     {
         switch (eventPath)
         {
-            case ControllerNotification.SyncViewState:
+            case ViewModelNotification.SyncViewState:
                 var healthObject = GameObject.FindGameObjectWithTag(UnityObjectTagName.HealthBar);
                 var staminaObject = GameObject.FindGameObjectWithTag(UnityObjectTagName.StaminaBar);
 
@@ -50,12 +50,12 @@ public class SceneView : MonoBehaviour, IView
         }
     }
 
-    public void SetController(BaseController controller)
+    public void SetViewModel(BaseViewModel viewModel)
     {
-        if (Controller != null)
-            throw new ApplicationException("Controller has been already initialized.");
+        if (ViewModel != null)
+            throw new ApplicationException("ViewModel has been already initialized.");
 
-        Controller = controller;
+        ViewModel = viewModel;
     }
 
     private void SetSliderValue(GameObject gameObject, int value)
@@ -67,6 +67,6 @@ public class SceneView : MonoBehaviour, IView
 
     public void Dispose()
     {
-        Controller = null;
+        ViewModel = null;
     }
 }

@@ -32,9 +32,9 @@ public class PlayerModel : CharacterModel
     {
         Health = value;
 
-        if (Controller != null)
+        if (ViewModel != null)
         {
-            Controller.Notify(ControllerNotification.PlayerHealthChanged, this, value);
+            ViewModel.Notify(ViewModelNotification.PlayerHealthChanged, this, value);
         }
     }
 
@@ -42,9 +42,9 @@ public class PlayerModel : CharacterModel
     {
         Stamina = value;
 
-        if (Controller != null)
+        if (ViewModel != null)
         {
-            Controller.Notify(ControllerNotification.PlayerStaminaChanged, this, value);
+            ViewModel.Notify(ViewModelNotification.PlayerStaminaChanged, this, value);
         }
     }
 }

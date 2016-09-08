@@ -25,7 +25,7 @@ public class GameSceneLoader : MonoBehaviour
         {
             var view = hud.GetComponent<SceneView>();
             var model = new SceneModel(view.SceneName, view.SceneCommandHints);
-            var controller = new SceneController(view, model);
+            var viewModel = new SceneViewModel(view, model);
         }
     }
 
@@ -37,7 +37,7 @@ public class GameSceneLoader : MonoBehaviour
 
         var view = instance.GetComponent<IView>();
         var model = GameStateManager.Instance.Player;
-        var controller = new PlayerController(view, model);
+        var viewModel = new PlayerViewModel(view, model);
 
         // get main player spawn point
         var spawnPointName = GameStateManager.Instance.ActiveSpawnPoint;

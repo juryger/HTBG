@@ -1,13 +1,16 @@
 ﻿using System;
 
+/// <summary>
+/// Base class for ViewModel (MVVM)
+/// </summary>
 [Serializable]
-public abstract class BaseController : IDisposable
+public abstract class BaseViewModel : IDisposable
 {
-    public BaseController(IView view, BaseModel model)
+    public BaseViewModel(IView view, BaseModel model)
     {
         View = view;
         Model = model;
-        View.SetController(this);
+        View.SetViewModel(this);
     }
 
     /// <summary>
@@ -53,7 +56,7 @@ public abstract class BaseController : IDisposable
     }
 
     // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-    // ~BaseController() {
+    // ~BaseViewModel() {
     //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
     //   Dispose(false);
     // }

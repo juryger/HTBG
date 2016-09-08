@@ -1,14 +1,14 @@
 ﻿using System;
 
-public class LootController : BaseController
+public class NpcViewModel : BaseViewModel
 {
-    public LootModel Model { get; private set; }
+    public NpcModel Model { get; private set; }
 
-    public LootController(IView view, LootModel model) :
+    public NpcViewModel(IView view, NpcModel model) :
         base(view, model)
     {
         Model = model;
-        Model.SetController(this);
+        Model.SetViewModel(this);
     }
 
     public override void Notify(string eventPath, object source, params object[] data)

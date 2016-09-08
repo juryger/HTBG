@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public class InventoryView : MonoBehaviour, IView
 {
-    public BaseController Controller { get; private set; }
+    public BaseViewModel ViewModel { get; private set; }
 
     public object[] GetViewData(string viewDataPath)
     {
@@ -18,16 +18,16 @@ public class InventoryView : MonoBehaviour, IView
         throw new NotImplementedException();
     }
 
-    public void SetController(BaseController controller)
+    public void SetViewModel(BaseViewModel viewModel)
     {
-        if (Controller != null)
-            throw new ApplicationException("Controller has been already initialized.");
+        if (ViewModel != null)
+            throw new ApplicationException("ViewModel has been already initialized.");
 
-        Controller = controller;
+        ViewModel = viewModel;
     }
 
     public void Dispose()
     {
-        Controller = null;
+        ViewModel = null;
     }
 }

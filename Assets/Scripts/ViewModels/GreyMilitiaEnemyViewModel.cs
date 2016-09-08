@@ -1,14 +1,14 @@
 ﻿using System;
 
-public class GreyMilitiaEnemyController : BaseController
+public class GreyMilitiaEnemyViewModel : BaseViewModel
 {
     public GreyMilitiaEnemyModel Model { get; private set; }
 
-    public GreyMilitiaEnemyController(IView view, GreyMilitiaEnemyModel model) :
+    public GreyMilitiaEnemyViewModel(IView view, GreyMilitiaEnemyModel model) :
         base(view, model)
     {
         Model = model;
-        Model.SetController(this);
+        Model.SetViewModel(this);
     }
 
     public override void Notify(string eventPath, object source, params object[] data)
