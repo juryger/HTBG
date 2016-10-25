@@ -7,6 +7,10 @@
 [Serializable]
 public abstract class BaseModel : IDisposable
 {
+    public BaseModel()
+    {
+    }
+
     /// <summary>
     /// ViewModel for Model.
     /// </summary>
@@ -24,9 +28,15 @@ public abstract class BaseModel : IDisposable
         ViewModel = viewModel;
     }
 
+    /// <summary>
+    /// Convert model to correspoinding DTO.
+    /// </summary>
+    /// <returns>corresponding DTO object</returns>
+    public abstract T ConvertToDTO<T>(params object[] data) where T : BaseDTO;
+
     #region IDisposable Support
 
-    private bool disposedValue = false; // To detect redundant calls
+    protected bool disposedValue = false; // To detect redundant calls
 
     protected virtual void Dispose(bool disposing)
     {

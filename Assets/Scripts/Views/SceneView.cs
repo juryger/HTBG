@@ -7,24 +7,34 @@ using UnityEngine.UI;
 /// </summary>
 public class SceneView : MonoBehaviour, IView
 {
-    /// <summary>
-    /// Scene name.
-    /// </summary>
-    public string SceneName;
+    ///////// <summary>
+    ///////// Scene identifier.
+    ///////// </summary>
+    //////public string SceneId;
+
+    ///////// <summary>
+    ///////// Scene name.
+    ///////// </summary>
+    //////public string SceneName;
+
+    ///////// <summary>
+    ///////// Scene command hints.
+    ///////// </summary>
+    //////public string[] SceneCommandHints;
 
     /// <summary>
-    /// Scene command hints.
+    /// Scene spawn points.
     /// </summary>
-    public string[] SceneCommandHints;
+    public string[] SceneSpawnPoints;
 
     public void Start()
     {
-        var commandHints = GameObject.Find("SceneCommandHintsText");
-        if (commandHints != null)
-        {
-            var textComponent = commandHints.GetComponent<Text>();
-            textComponent.text = String.Join(" | ", SceneCommandHints ?? new string[] { });
-        }
+        //////var commandHints = GameObject.Find("SceneCommandHintsText");
+        //////if (commandHints != null)
+        //////{
+        //////    var textComponent = commandHints.GetComponent<Text>();
+        //////    textComponent.text = String.Join(" | ", SceneCommandHints ?? new string[] { });
+        //////}
     }
 
     /// <summary>
@@ -36,15 +46,29 @@ public class SceneView : MonoBehaviour, IView
     {
         switch (eventPath)
         {
-            case ViewModelNotification.SyncViewState:
+            case NotificationName.NotifyViewSyncState:
+                var sceneTitleText = GameObject.Find("SceneTitleText");
+                var commandHintsText = GameObject.Find("SceneCommandHintsText");
                 var healthObject = GameObject.FindGameObjectWithTag(UnityObjectTagName.HealthBar);
                 var staminaObject = GameObject.FindGameObjectWithTag(UnityObjectTagName.StaminaBar);
 
+                if (sceneTitleText != null)
+                {
+                    var textComponent = sceneTitleText.GetComponent<Text>();
+                    textComponent.text = (string)data[0];
+                }
+
+                if (commandHintsText != null)
+                {
+                    var textComponent = commandHintsText.GetComponent<Text>();
+                    textComponent.text = (string)data[1];
+                }
+
                 if (healthObject != null)
-                    SetSliderValue(healthObject, (int)data[0]);
+                    SetSliderValue(healthObject, (int)data[2]);
 
                 if (staminaObject)
-                    SetSliderValue(staminaObject, (int)data[1]);
+                    SetSliderValue(staminaObject, (int)data[3]);
 
                 break;
         }

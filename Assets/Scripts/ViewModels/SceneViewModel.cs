@@ -8,15 +8,20 @@
         Model = model;
         Model.SetViewModel(this);
 
-        Notify(ViewModelNotification.SyncViewState, this, Model.Player.Health, Model.Player.Stamina);
+        Notify(NotificationName.NotifyViewSyncState,
+            this,
+            GameStateManager.Instance.ActiveScene.Name,
+            GameStateManager.Instance.ActiveScene.CommandHints,
+            GameStateManager.Instance.Player.Statistics.CurrentHealth,
+            GameStateManager.Instance.Player.Statistics.CurrentStamina);
     }
 
     public override void Notify(string eventPath, object source, params object[] data)
     {
         switch (eventPath)
         {
-            case ViewModelNotification.SyncViewState:
-                View.Notify(ViewModelNotification.SyncViewState, this, data);
+            case NotificationName.NotifyViewSyncState:
+                View.Notify(NotificationName.NotifyViewSyncState, this, data);
                 break;
         }
     }

@@ -6,10 +6,14 @@ using UnityEngine;
 /// </summary>
 public class PlayerView : MonoBehaviour, IView
 {
+    private const int SPEED_WALK = 50;
+    private const int SPEED_RUN = 70;
+
     private Rigidbody2D rbody;
     private Animator anim;
 
     private float inputX, inputY;
+    private int speed;
 
     // Use this for initialization
     void Start()
@@ -27,7 +31,7 @@ public class PlayerView : MonoBehaviour, IView
             if (Math.Abs(movementVector.x) != 0.1f && Math.Abs(movementVector.y) != 0.1f)
             {
                 anim.SetBool("iswalking", true);
-                rbody.MovePosition(rbody.position + movementVector * 50 * Time.deltaTime);
+                rbody.MovePosition(rbody.position + movementVector * speed * Time.deltaTime);
             }
             else
             {
@@ -49,19 +53,29 @@ public class PlayerView : MonoBehaviour, IView
     {
         switch (eventPath)
         {
-            case ViewModelNotification.PlayerPositionChanged:
+            case NotificationName.PlayerPositionChanged:
                 var x = (float)data[0];
                 var y = (float)data[1];
                 var z = (float)data[2];
                 transform.position = new Vector3(x, y, z);
                 break;
-            case ViewModelNotification.PlayerMovementVectorChanged:
+            case NotificationName.PlayerMovementVectorChanged:
                 inputX = (float)data[0];
                 inputY = (float)data[1];
+
+                var isRun = (bool)data[2];
+                speed = isRun ? SPEED_RUN : SPEED_WALK;
+
                 break;
-            case ViewModelNotification.PlayerMovementHaulted:
+            case NotificationName.PlayerMovementHaulted:
                 inputX = 0f;
                 inputY = 0f;
+                break;
+            case NotificationName.PlayerStatisticsChanged:
+                //View.Notify(eventPath, source, Model.Statistics);
+                break;
+            case NotificationName.RequestPlayerPosition:
+                ViewModel.Notify(NotificationName.ResponsePlayerPosition, rbody.position.x, rbody.position.y);
                 break;
             default:
                 break;

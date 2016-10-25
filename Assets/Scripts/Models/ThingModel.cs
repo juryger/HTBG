@@ -6,17 +6,21 @@
 [Serializable]
 public abstract class ThingModel : BaseModel
 {
-    protected string internalKey;
-
-    public ThingModel(string key, string name, string commandHint)
+    public ThingModel(string id, string name, string commandHint)
     {
-        internalKey = String.Format("{0}.{1}", key, DateTime.Now.Ticks);
+        Id = id;
         Name = name;
         CommandHint = commandHint;
     }
 
+
+    // Model identifier
+    public string Id { get; private set; }
+
+    // Model name
     public string Name { get; private set; }
 
+    // Modle command hint
     public string CommandHint { get; private set; }
 
     /// <summary>
@@ -24,36 +28,18 @@ public abstract class ThingModel : BaseModel
     /// </summary>
     public UnityPosition Position { get; private set; }
 
-    /// <summary>
-    /// Location on the scene
-    /// </summary>
-    public UnityVector2 MovementVector { get; private set; }
-
-    public string Key
-    {
-        get { return internalKey; }
-    }
-
     public void SetPosition(UnityPosition pos)
     {
         Position = pos;
 
         if (ViewModel != null)
         {
-            ViewModel.Notify(ViewModelNotification.PlayerPositionChanged, this, pos);
+            ViewModel.Notify(NotificationName.PlayerPositionChanged, this, pos);
         }
     }
 
-    public void SetMovementVector(UnityVector2 vector)
+    public override T ConvertToDTO<T>(params object[] data)
     {
-        MovementVector = vector;
-
-        if (ViewModel != null)
-        {
-            if (vector.X == 0 && vector.Y == 0)
-                ViewModel.Notify(ViewModelNotification.PlayerMovementHaulted, this);
-            else
-                ViewModel.Notify(ViewModelNotification.PlayerMovementVectorChanged, this, vector);
-        }
+        throw new NotImplementedException();
     }
 }

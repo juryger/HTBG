@@ -1,19 +1,26 @@
-﻿using System.Collections.Generic;
-
+﻿using System;
 /// <summary>
 /// Manager of the current scene (singleton).
 /// </summary>
 public class GameStateManager : Singleton<GameStateManager>
 {
+    private ExtendedGameState extendedGameState;
+
     /// <summary>
-    /// Indicate if there is a game being loaded or started.
+    /// Protected consructor for Singleton behaviour.
     /// </summary>
-    public bool HasActiveGame { get; private set; }
+    protected GameStateManager()
+    {
+        extendedGameState = new ExtendedGameState();
+
+        // create connection to local database
+        DbManager = new DataService(GeneralName.LocalDatabaseName);
+    }
 
     /// <summary>
     /// Active scene name.
     /// </summary>
-    public string ActiveSceneName { get; private set; }
+    public SceneModel ActiveScene { get; private set; }
 
     /// <summary>
     /// Name of spawn point for showing player during scene load
@@ -21,114 +28,148 @@ public class GameStateManager : Singleton<GameStateManager>
     public string ActiveSpawnPoint { get; private set; }
 
     /// <summary>
-    /// Position of main player during load saved game.
+    /// Main player.
     /// </summary>
-    public UnityPosition PlayerPositionOnGameLoad { get; private set; }
+    public CharacterModel Player { get; private set; }
 
     /// <summary>
-    /// Main player state
+    /// Current authenticated user of the game.
     /// </summary>
-    public PlayerModel Player { get; private set; }
+    public UserModel AuthenticatedUser { get; private set; }
 
     /// <summary>
-    /// State of NPCs for active scene.
+    /// Local database manager.
     /// </summary>
-    public Dictionary<string, NpcModel> ActiveSceneNPCs { get; private set; }
+    public DataService DbManager { get; private set; }
 
     /// <summary>
-    /// State of Enemies for active scene.
+    /// Login existing user.
     /// </summary>
-    public Dictionary<string, EnemyModel> ActiveSceneEnemies { get; private set; }
-
-    /// <summary>
-    /// State of Loot for active scene.
-    /// </summary>
-    public Dictionary<string, NpcModel> ActiveLoot { get; private set; }
-
-
-    /// <summary>
-    /// State of Facilities for active scene.
-    /// </summary>
-    public Dictionary<string, NpcModel> ActiveFacilities { get; private set; }
-
-    /// <summary>
-    /// Protected consructor for Singleton behaviour.
-    /// </summary>
-    protected GameStateManager()
+    /// <param name="login">user login</param>
+    /// <param name="password">user password</param>
+    /// <returns>true if authentication succeeded, false if not</returns>
+    public bool LoginExistingUser(string login, string password)
     {
-        // note: remove after creating main menu (for test purposes)
-        Player = new PlayerModel("Rumata Estorsky", 40, 185, 90);
-        ActiveSceneName = SceneName.SkeletonInnSuburbs;
-        ActiveSpawnPoint = GeneralName.DefaultSpawnPointName;
+        AuthenticatedUser = DbManager.AuthenticateUser(login, password);
 
-        // note: for testing purpose
-        //////Load();
+        return AuthenticatedUser != null;
     }
 
     /// <summary>
-    /// Prepare player state for the new game.
+    /// Register new user.
     /// </summary>
-    public void NewGame(string playerName, int playerAge, int playerHeight, int playerWeight)
+    /// <param name="login">user's login</param>
+    /// <param name="password">user's password</param>
+    /// <param name="age">age of player associated with user</param>
+    /// <param name="gender">gender of player associated with user</param>
+    /// <returns>true if user registered successfully, false if user with the login already exists</returns>
+    public bool RegisterNewUser(string login, string password, int age, CharacterGender gender)
     {
-        Player = new PlayerModel(playerName, playerAge, playerHeight, playerWeight);
-        ActiveSceneName = SceneName.SkeletonInnSuburbs;
-
-        // todo: initialize key NPCs, enemies, loot and facilities for new game
-    }
-
-    /// <summary>
-    /// Load state of the game from some storage.
-    /// </summary>
-    /// <param name="savedGameName"></param>
-    public void LoadGame(string savedGameName)
-    {
-        // todo: load real data from some storage
-        Player = new PlayerModel("juryger", 34, 175, 75);
-        ActiveSceneName = SceneName.SkeletonInn;
-        ActiveSpawnPoint = GeneralName.DefaultSpawnPointName;
-        PlayerPositionOnGameLoad = new UnityPosition(49f, -785f, 0f);
-
-        // todo: load key NPCs, enemies, loot and facilities for saved game
-    }
-    /// <summary>
-    /// Save state of the game to some storage.
-    /// </summary>
-    /// <param name="gameName"></param>
-    public void SaveGame(string gameName)
-    {
-        // todo: Save Player state
-        //Player
-
-
-        // todo: save active scene name
-        //ActiveSceneName
-
-        // todo: save key NPC, enemis, loot and facilities state
-    }
-
-    /// <summary>
-    /// Initialize scene before loading at Unity.
-    /// </summary>
-    /// <param name="sceneName"></param>
-    /// <param name="spawnPoint"></param>
-    public void InitializeScene(string sceneName, string spawnPoint)
-    {
-        // todo: load base scene data from some storage
-        ActiveSceneName = sceneName;
-        ActiveSpawnPoint = spawnPoint;
-
-        // note: for testing purpose
-        if (Player.ViewModel != null)
+        if (DbManager.CheckLogin(login))
         {
-            Player.ViewModel.Dispose();
-
-            Player = new PlayerModel("Rumata Estorsky", 40, 185, 90);
+            return false;
         }
 
-        Player.SetHealth(50);
-        Player.SetStamina(50);
-        //////Save();
+        AuthenticatedUser = DbManager.RegisterNewUser(login, password, age, gender);
+
+        LoadLastSavedGame();
+
+        return null != AuthenticatedUser;
     }
+
+    /// <summary>
+    /// Logout user.
+    /// </summary>
+    public void LogoutUser()
+    {
+        AuthenticatedUser = null;
+    }
+
+    /// <summary>
+    /// Load last saved state of the game from storage.
+    /// </summary>
+    public void LoadLastSavedGame()
+    {
+        if (AuthenticatedUser == null)
+            throw new ApplicationException("Could not load last saved game because user is not authenitcated.");
+
+        var gameState = DbManager.GetLastGameSave(AuthenticatedUser.Login);
+        if (gameState == null)
+            throw new ApplicationException("Could not load last save game because it is not exist at storage.");
+
+        Player = DbManager.LoadPlayerState(gameState.Id);
+        if (Player == null)
+            throw new ApplicationException("Could not load last save game because player is not exist at storage.");
+
+        // todo: load Characters, Loots, and Facilities for saved game
+        // extendedGameState = DbManager.LoadPlayerState(gameState.Id);
+    }
+
+    /// <summary>
+    /// Save state of the game to storage.
+    /// </summary>
+    public void SaveGame()
+    {
+        if (AuthenticatedUser == null)
+            throw new ApplicationException("Could not save game because user is not authenticated.");
+
+        // save game state
+        DbManager.SaveGame(AuthenticatedUser.Login, ActiveScene.Id, Player, extendedGameState);
+
+        ResetGameExceptCurrentScene();
+    }
+
+    /// <summary>
+    /// Set active scene.
+    /// </summary>
+    /// <param name="sceneId">scene identifier</param>
+    public void SetActiveScene(string sceneId)
+    {
+        ActiveScene = DbManager.LoadSceneDefenition(sceneId);
+
+        if (ActiveScene == null)
+            throw new ApplicationException(string.Format("Could not find a scene with id: {0}", sceneId));
+    }
+
+    /// <summary>
+    /// Load scene state from storage
+    /// </summary>
+    /// <param name="sceneId">scene identifier</param>
+    public void LoadSceneState(string sceneId)
+    {
+        // todo: update extended state for scene objects
+    }
+
+    /// <summary>
+    /// Reset game state for unloaded scene.
+    /// </summary>
+    /// <param name="sceneId">scene identifier</param>
+    private void ResetGameExceptCurrentScene()
+    {
+        // todo: update extended state for scene objects
+    }
+
+    /// <summary>
+    /// Set active spawn point on scene.
+    /// </summary>
+    /// <param name="spawnPoint">spwan point inside scene</param>
+    public void SetActiveSpawnPoint(string spawnPoint)
+    {
+        if (string.IsNullOrEmpty(spawnPoint))
+            throw new ArgumentNullException("spawnPoint");
+
+        ActiveSpawnPoint = spawnPoint;
+    }
+
+    /// <summary>
+    /// Reset active spawn point on scene (player current position would be used instead).
+    /// </summary>
+    public void ResetActiveSpawnPoint()
+    {
+        ActiveSpawnPoint = string.Empty;
+    }
+
+    #region PersistenceManager based on local file and binary serialization
 
     //////// todo: move Load and Save to PersistenceManager
     //////public void Load()
@@ -153,4 +194,6 @@ public class GameStateManager : Singleton<GameStateManager>
     //////    bf.Serialize(file, Player);
     //////    file.Close();
     //////}
+
+    #endregion
 }

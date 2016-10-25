@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Unity script for main menu screen.
@@ -8,17 +9,47 @@ public class MainMenuView : MonoBehaviour, IView
 {
     public BaseViewModel ViewModel { get; private set; }
 
-    public object[] GetViewData(string viewDataPath)
-    {
-        throw new NotImplementedException();
-    }
-
     public void Notify(string eventPath, object source, params object[] data)
     {
-        // todo: find item with required name and update its visibility
-        //gameObject.GetComponentInChildren<T>
+        switch (eventPath)
+        {
+            case NotificationName.NotifyViewAuthenticatedUserChanged:
+                UserModel user = data != null && data[0] != null ?
+                    (UserModel)data[0] :
+                    null;
 
-        throw new NotImplementedException();
+                var userGreetingObject = GameObject.FindGameObjectWithTag(UnityObjectTagName.AuthenticatedUserGreeting);
+                if (userGreetingObject != null)
+                {
+                    var greetingText = userGreetingObject.GetComponent<Text>();
+                    greetingText.text = user != null ?
+                        String.Format("Greeting, {0}!", user.Login) :
+                        "Greeting!";
+                }
+
+                if (user == null)
+                    NavigateToMainMenuScreen(MainMenuScreen.AuthenticationMenuScreen);
+                else
+                    NavigateToMainMenuScreen(MainMenuScreen.ExistingPlayerGameMenuScreen);
+
+                break;
+            case NotificationName.NotifyViewUserAuthenticationFailed:
+            case NotificationName.NotifyUserRegisterFailed:
+                SetValidationMessage(data[0].ToString());
+                break;
+        }
+    }
+
+    private void SetValidationMessage(string message)
+    {
+        foreach (var text in gameObject.GetComponentsInChildren<Text>())
+        {
+            if (text.name == "ValidationText")
+            {
+                text.text = message;
+                break;
+            }
+        }
     }
 
     public void SetViewModel(BaseViewModel viewModel)
@@ -33,4 +64,179 @@ public class MainMenuView : MonoBehaviour, IView
     {
         ViewModel = null;
     }
+
+    /// <summary>
+    /// Authenticate existing user.
+    /// </summary>
+    /// <param name="loginScreen">screen which contains login parameters</param>
+    public void LoginUser(Canvas loginScreen)
+    {
+        SetValidationMessage(string.Empty);
+
+        string login = "", password = "";
+        foreach (var input in loginScreen.GetComponentsInChildren<InputField>())
+        {
+            switch (input.name)
+            {
+                case "LoginInputField":
+                    login = input.text;
+                    break;
+                case "PasswordInputField":
+                    password = input.text;
+                    break;
+            }
+        }
+
+        // authenticate user in Database
+        ViewModel.Notify(NotificationName.LoginExistingUser, this, login, password);
+    }
+
+    /// <summary>
+    /// Register new user.
+    /// </summary>
+    /// <param name="loginScreen">screen which contains register new user parameters</param>
+    public void RegisterUser(Canvas loginScreen)
+    {
+        SetValidationMessage(string.Empty);
+
+        string login = "", password = "", repassword = "";
+        int age = 0;
+        CharacterGender gender = CharacterGender.Male;
+
+        foreach (var input in loginScreen.GetComponentsInChildren<InputField>())
+        {
+            switch (input.name)
+            {
+                case "LoginInputField":
+                    login = input.text;
+                    break;
+                case "PasswordInputField":
+                    password = input.text;
+                    break;
+                case "ReenterPasswordInputField":
+                    repassword = input.text;
+                    break;
+                case "AgeInputField":
+                    int.TryParse(input.text, out age);
+                    break;
+            }
+        }
+
+        if (password != repassword)
+        {
+            SetValidationMessage("Passwords mismatched");
+            return;
+        }
+
+        var genderDropDown = loginScreen.GetComponentInChildren<Dropdown>();
+        if (genderDropDown != null && genderDropDown.name == "GenderDropdown")
+            gender = (CharacterGender)genderDropDown.value;
+
+        // todo: register user in Database
+        ViewModel.Notify(NotificationName.RegisterNewUser, this, login, password, age, ((int)gender).ToString());
+    }
+
+    public void LogoutUser()
+    {
+        // logout user
+        GameStateManager.Instance.LogoutUser();
+
+        ViewModel.Notify(NotificationName.LogoutUser, this);
+    }
+
+    /// <summary>
+    /// Load last save game command handler.
+    /// </summary>
+    public void LoadLastSavedGame()
+    {
+        GameStateManager.Instance.LoadLastSavedGame();
+    }
+
+    /// <summary>
+    /// Load last save game command handler.
+    /// </summary>
+    public void SavedGame()
+    {
+        GameStateManager.Instance.SaveGame();
+    }
+
+    /// <summary>
+    /// Terminate game.
+    /// </summary>
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    /// <summary>
+    /// Navigate to authentication menu screen.
+    /// </summary>
+    public void GoToAuthenticationMenuScreen()
+    {
+        NavigateToMainMenuScreen(MainMenuScreen.AuthenticationMenuScreen);
+    }
+
+    /// <summary>
+    /// Navigate to login screen.
+    /// </summary>
+    public void GoToLoginScreen()
+    {
+        NavigateToMainMenuScreen(MainMenuScreen.LoginPlayerScreen);
+
+        foreach (var text in gameObject.GetComponentsInChildren<Text>())
+        {
+            if (text.name == "ValidationText")
+            {
+                text.text = string.Empty;
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Navigate to register new user screen.
+    /// </summary>
+    public void GoToRegisterUserScreen()
+    {
+        NavigateToMainMenuScreen(MainMenuScreen.NewPlayerScreen);
+
+        foreach (var text in gameObject.GetComponentsInChildren<Text>())
+        {
+            if (text.name == "ValidationText")
+            {
+                text.text = string.Empty;
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Naviage to required main menu screen.
+    /// </summary>
+    /// <param name="screenName">screen name</param>
+    private void NavigateToMainMenuScreen(string screenName)
+    {
+        if (String.IsNullOrEmpty(screenName))
+            return;
+
+        var mainMenuRoot = GameObject.FindGameObjectWithTag(UnityObjectTagName.MainMenu);
+        if (mainMenuRoot != null)
+        {
+            foreach (var canvas in mainMenuRoot.GetComponentsInChildren<Canvas>(true))
+            {
+                if (canvas.name == MainMenuScreen.LogoScreen)
+                    continue;
+
+                if (canvas.name == screenName)
+                {
+
+                    canvas.gameObject.SetActive(true);
+                    continue;
+                }
+
+                canvas.gameObject.SetActive(false);
+            }
+        }
+    }
+
 }

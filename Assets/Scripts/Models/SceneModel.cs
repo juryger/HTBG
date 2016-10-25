@@ -1,29 +1,49 @@
-﻿/// <summary>
+﻿using System;
+
+/// <summary>
 /// Represent scene of the game.
 /// </summary>
 public class SceneModel : BaseModel
 {
-    public SceneModel(string name, string[] commandHints)
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="id">scene identifier</param>
+    /// <param name="name">name of the scene</param>
+    /// <param name="commandHints">list of command hints</param>
+    /// <param name="spawnPoints">list of spawn points of the scene</param>
+    public SceneModel(string id, string name, string commandHints)
     {
-        Name = name ?? string.Empty;
-        CommandHints = commandHints ?? new string[] { };
+        if (string.IsNullOrEmpty(id))
+            throw new ArgumentNullException("id");
+
+        Id = id;
+        Name = name;
+        CommandHints = commandHints;
     }
 
     /// <summary>
-    /// Name of the scene.
+    /// Scene identifier.
+    /// </summary>
+    public string Id { get; private set; }
+
+    /// <summary>
+    /// Scene name.
     /// </summary>
     public string Name { get; private set; }
 
     /// <summary>
-    /// List of supported command hints.
+    /// Command hints of the scene.
     /// </summary>
-    public string[] CommandHints { get; private set; }
+    public string CommandHints { get; private set; }
 
-    public PlayerModel Player
+    public override T ConvertToDTO<T>(params object[] data)
     {
-        get
+        return new SceneDTO()
         {
-            return GameStateManager.Instance.Player;
-        }
+            SceneId = Id,
+            Title = Name,
+            CommandHints = this.CommandHints,
+        } as T;
     }
 }

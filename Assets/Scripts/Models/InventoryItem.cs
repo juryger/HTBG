@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-/// <summary>
+﻿/// <summary>
 /// Represent an item from player's inventory.
 /// </summary>
 public class InventoryItem
@@ -10,11 +7,6 @@ public class InventoryItem
     /// Name of the item.
     /// </summary>
     public string Name { get; private set; }
-
-    /// <summary>
-    /// Brief description of item.
-    /// </summary>
-    public string Description { get; private set; }
 
     /// <summary>
     /// Flag indicates if item is equiped on player.

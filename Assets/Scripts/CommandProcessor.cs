@@ -21,6 +21,10 @@ public class CommandProcessor
         // process the tokens
         switch (parts[0])
         {
+            case "m":
+            case "menu":
+                throw new NotImplementedException();
+            case "p":
             case "pick":
                 if (parts.Length == 1)
                     break;
@@ -42,23 +46,46 @@ public class CommandProcessor
                 {
                     case "north":
                         strResult = "Got Go North";
-
                         GameStateManager.Instance.Player.SetMovementVector(new UnityVector2(0, 1f));
                         break;
                     case "south":
                         strResult = "Got Go South";
-
                         GameStateManager.Instance.Player.SetMovementVector(new UnityVector2(0, -1f));
                         break;
                     case "east":
                         strResult = "Got Go East";
-
                         GameStateManager.Instance.Player.SetMovementVector(new UnityVector2(1f, 0));
                         break;
                     case "west":
                         strResult = "Got Go West";
-
                         GameStateManager.Instance.Player.SetMovementVector(new UnityVector2(-1f, 0));
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case "r":
+            case "run":
+                if (parts.Length == 1)
+                    break;
+
+                switch (parts[1])
+                {
+                    case "north":
+                        strResult = "Got Run North";
+                        GameStateManager.Instance.Player.SetMovementVector(new UnityVector2(0, 1f), true);
+                        break;
+                    case "south":
+                        strResult = "Got Run South";
+                        GameStateManager.Instance.Player.SetMovementVector(new UnityVector2(0, -1f), true);
+                        break;
+                    case "east":
+                        strResult = "Got Run East";
+                        GameStateManager.Instance.Player.SetMovementVector(new UnityVector2(1f, 0), true);
+                        break;
+                    case "west":
+                        strResult = "Got Run West";
+                        GameStateManager.Instance.Player.SetMovementVector(new UnityVector2(-1f, 0), true);
                         break;
                     default:
                         break;
@@ -119,7 +146,7 @@ public class CommandProcessor
                         sceneName = SceneName.SkeletonInnSuburbs;
                 }
 
-                GameStateManager.Instance.InitializeScene(sceneName, GeneralName.DefaultSpawnPointName);
+                GameStateManager.Instance.SetActiveSpawnPoint(GeneralName.DefaultSpawnPointName);
                 SceneManager.LoadScene(sceneName);
                 break;
             default:

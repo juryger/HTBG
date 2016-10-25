@@ -1,20 +1,39 @@
-﻿/// <summary>
+﻿using System;
+/// <summary>
 /// Represent inventory store for characters of the game.
 /// </summary>
-public class InventoryModel : BaseModel
+public class InventoryModel : ThingModel
 {
-    private int maxInventoryItems = 9;
-
-    public InventoryModel(int maxInventoryItems)
+    public InventoryModel(string Id, string name, string commandHind, InventoryKind kind)
+        : base(Id, name, commandHind)
     {
-        this.maxInventoryItems = maxInventoryItems;
+        MaxInventoryItems = 9;
+        InventoryType = kind;
+
     }
+
+    /// <summary>
+    /// Inventory type.
+    /// </summary>
+    public InventoryKind InventoryType { get; private set; }
 
     /// <summary>
     /// Maximum nubmer of cells of inventory for placing items.
     /// </summary>
-    public int MaxInventoryItems
+    public int MaxInventoryItems { get; private set; }
+
+    public override T ConvertToDTO<T>(params object[] data)
     {
-        get { return maxInventoryItems; }
+        throw new NotImplementedException();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            //
+        }
+
+        base.Dispose(disposing);
     }
 }
