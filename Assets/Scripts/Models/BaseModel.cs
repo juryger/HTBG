@@ -29,6 +29,14 @@ public abstract class BaseModel : IDisposable
     }
 
     /// <summary>
+    /// Allows to reset ViewModel, because for character who moving between scenes, view recreated each time.
+    /// </summary>
+    public void ResetModel()
+    {
+        ViewModel = null;
+    }
+
+    /// <summary>
     /// Convert model to correspoinding DTO.
     /// </summary>
     /// <returns>corresponding DTO object</returns>

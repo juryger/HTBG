@@ -7,6 +7,13 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GameSceneLoader : MonoBehaviour
 {
+    private bool isShownMenu;
+
+    /// <summary>
+    /// Current scene identifier.
+    /// </summary>
+    public string SceneId;
+
     // Use this for initialization
     void Start()
     {
@@ -17,18 +24,43 @@ public class GameSceneLoader : MonoBehaviour
         PrepareMainPlayer();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!isShownMenu)
+            {
+                isShownMenu = true;
+                Time.timeScale = 0;
+
+                // load main menu in additive mode
+                SceneManager.LoadScene(SceneName.MainMenu, LoadSceneMode.Additive);
+            }
+            else
+            {
+                isShownMenu = false;
+                Time.timeScale = 1.0f;
+
+                SceneManager.UnloadScene(SceneName.MainMenu);
+            }
+        }
+    }
+
     private void PrepareSceneState()
     {
-        //if (string.IsNullOrEmpty(SceneId))
-        //    throw new ApplicationException("Scene identifier for SceneLoader should be initialized.");        
-        var sceneName = SceneManager.GetActiveScene().name;
-        Debug.Log("Loading state for scene: " + sceneName);
+        Debug.Log("Loading state for scene: " + SceneManager.GetActiveScene().name);
 
-        // activate scene
-        GameStateManager.Instance.SetActiveScene(sceneName);
+        // set activate scene
+        if (string.IsNullOrEmpty(SceneId))
+        {
+            Debug.Log("SceneLoader game object should define scene identifier.");
+            throw new ApplicationException("There is not defined a scene identifier for current Scene.");
+        }
+
+        GameStateManager.Instance.SetActiveScene(SceneId);
 
         // load scene state from storage
-        GameStateManager.Instance.LoadSceneState(sceneName);
+        GameStateManager.Instance.LoadSceneState(SceneId);
 
         var hud = GameObject.FindGameObjectWithTag("HUD");
         if (hud != null)
@@ -47,6 +79,7 @@ public class GameSceneLoader : MonoBehaviour
 
         var view = instance.GetComponent<IView>();
         var model = GameStateManager.Instance.Player;
+        model.ResetModel();
         var viewModel = new PlayerViewModel(view, model);
 
         var playerPosition = new Vector3();

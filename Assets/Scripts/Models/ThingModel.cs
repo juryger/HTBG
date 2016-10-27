@@ -6,11 +6,18 @@
 [Serializable]
 public abstract class ThingModel : BaseModel
 {
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="id">id of object</param>
+    /// <param name="name">name of object</param>
+    /// <param name="commandHint">command hint for interacting with object</param>
     public ThingModel(string id, string name, string commandHint)
     {
         Id = id;
         Name = name;
         CommandHint = commandHint;
+        Position = new UnityPosition(0f, 0f, 0f);
     }
 
 

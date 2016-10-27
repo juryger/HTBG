@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class CommandProcessor
@@ -23,7 +24,12 @@ public class CommandProcessor
         {
             case "m":
             case "menu":
-                throw new NotImplementedException();
+                Time.timeScale = 0;
+
+                // load main menu in additive mode
+                SceneManager.LoadScene(SceneName.MainMenu, LoadSceneMode.Additive);
+
+                break;
             case "p":
             case "pick":
                 if (parts.Length == 1)

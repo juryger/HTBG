@@ -11,7 +11,7 @@
         Notify(NotificationName.NotifyViewSyncState,
             this,
             GameStateManager.Instance.ActiveScene.Name,
-            GameStateManager.Instance.ActiveScene.CommandHints,
+            GameStateManager.Instance.ActiveScene.CommandHints.Replace(";", " | "),
             GameStateManager.Instance.Player.Statistics.CurrentHealth,
             GameStateManager.Instance.Player.Statistics.CurrentStamina);
     }

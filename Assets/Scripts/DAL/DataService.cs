@@ -88,11 +88,12 @@ public class DataService
         CreateTable<CharacterDTO>();
         CreateTable<CharacterStateDTO>();
         CreateTable<SceneDTO>();
+        CreateTable<InventoryDTO>();
 
         _connection.InsertAll(new[] {
             new SceneDTO {
                 SceneId = "55327246-932E-4CCE-BBA1-8DB9A905F686",
-                Title = "SkeletonInnSuburb",
+                Title = "SkeletonInnSuburbs",
                 CommandHints = "menu(m);go(g) <direction>;run(r) <direction>;turn(t) <direction>;hault(h);action(a)",
             },
             new SceneDTO {
@@ -295,11 +296,10 @@ public class DataService
         var gameStateDto = gameState.ConvertToDTO<GameStateDTO>();
 
         // Create main character safe point state
-        var gameStateCharacterDto = new CharacterStateDTO(
-            gameStateDto.GameStateId,
+        var gameStateCharacterDto =
             player.ConvertToDTO<CharacterStateDTO>(
                 sceneId,
-                gameStateDto.GameStateId));
+                gameStateDto.GameStateId);
 
         // todo: save all objects to Database in transaction
         _connection.Insert(gameStateDto);

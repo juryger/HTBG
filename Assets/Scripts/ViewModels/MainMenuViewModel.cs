@@ -53,7 +53,21 @@ public class MainMenuViewModel : BaseViewModel
                 break;
             case NotificationName.LogoutUser:
                 GameStateManager.Instance.LogoutUser();
-                View.Notify(NotificationName.NotifyViewAuthenticatedUserChanged, this, null);
+
+                // navigate to main menu scene (because current scene is gameplay scene with additive menu scene)
+                SceneManager.LoadScene(SceneName.MainMenu);
+
+                break;
+            case NotificationName.LoadLastSavedGame:
+                GameStateManager.Instance.LoadLastSavedGame();
+
+                // navigate to scene
+                SceneManager.LoadScene(GameStateManager.Instance.ActiveScene.Name);
+
+                break;
+            case NotificationName.SaveGame:
+                GameStateManager.Instance.SaveGame();
+                View.Notify(NotificationName.NotifyGameSavedSuccessfully, this, "Games saved.");
                 break;
             default:
                 break;

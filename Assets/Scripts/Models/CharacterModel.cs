@@ -26,13 +26,19 @@ public class CharacterModel : ThingModel
 
     public override T ConvertToDTO<T>(params object[] data)
     {
-        var dto = new CharacterDTO()
+        T result = null;
+
+        // create initail character for user
+        var characterDto = new CharacterDTO()
         {
             SceneId = data[0].ToString(),
             CharacterId = Id,
+            Name = Name,
+            Age = Age,
+            Gender = Gender,
+            CharacterType = CharacterType,
+            CommandHint = CommandHint,
             InventoryId = Inventory.Id,
-            LocationX = Position.X,
-            LocationY = Position.Y,
             ArmorLevel = Statistics.ArmorLevel,
             DamageLevel = Statistics.DamageLevel,
             HealthLevel = Statistics.HealthLevel,
@@ -44,16 +50,19 @@ public class CharacterModel : ThingModel
             XpPoints = Statistics.XpPoints,
         };
 
-        // create initail character for user
-        if (data[1] != null)
+        result = characterDto as T;
+        if (data.Length > 1)
         {
             // request current position of player
             ViewModel.Notify(NotificationName.RequestPlayerPosition, this);
 
-            dto = new CharacterStateDTO(data[1].ToString(), dto);
+            characterDto.LocationX = this.Position.X;
+            characterDto.LocationY = this.Position.Y;
+
+            result = new CharacterStateDTO(data[1].ToString(), characterDto) as T;
         }
 
-        return dto as T;
+        return result;
     }
 
     public void SetMovementVector(UnityVector2 vector, bool isRun = false)

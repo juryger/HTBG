@@ -4,7 +4,11 @@
 /// </summary>
 public class GameStateManager : Singleton<GameStateManager>
 {
+    // Active game state
     private ExtendedGameState extendedGameState;
+
+    // Local database manager
+    private DataService dbManager;
 
     /// <summary>
     /// Protected consructor for Singleton behaviour.
@@ -14,7 +18,7 @@ public class GameStateManager : Singleton<GameStateManager>
         extendedGameState = new ExtendedGameState();
 
         // create connection to local database
-        DbManager = new DataService(GeneralName.LocalDatabaseName);
+        dbManager = new DataService(GeneralName.LocalDatabaseName);
     }
 
     /// <summary>
@@ -38,11 +42,6 @@ public class GameStateManager : Singleton<GameStateManager>
     public UserModel AuthenticatedUser { get; private set; }
 
     /// <summary>
-    /// Local database manager.
-    /// </summary>
-    public DataService DbManager { get; private set; }
-
-    /// <summary>
     /// Login existing user.
     /// </summary>
     /// <param name="login">user login</param>
@@ -50,7 +49,7 @@ public class GameStateManager : Singleton<GameStateManager>
     /// <returns>true if authentication succeeded, false if not</returns>
     public bool LoginExistingUser(string login, string password)
     {
-        AuthenticatedUser = DbManager.AuthenticateUser(login, password);
+        AuthenticatedUser = dbManager.AuthenticateUser(login, password);
 
         return AuthenticatedUser != null;
     }
@@ -65,14 +64,17 @@ public class GameStateManager : Singleton<GameStateManager>
     /// <returns>true if user registered successfully, false if user with the login already exists</returns>
     public bool RegisterNewUser(string login, string password, int age, CharacterGender gender)
     {
-        if (DbManager.CheckLogin(login))
+        if (dbManager.CheckLogin(login))
         {
             return false;
         }
 
-        AuthenticatedUser = DbManager.RegisterNewUser(login, password, age, gender);
+        AuthenticatedUser = dbManager.RegisterNewUser(login, password, age, gender);
 
         LoadLastSavedGame();
+
+        // Set default spawn point in order to set initial player position at scene.
+        ActiveSpawnPoint = GeneralName.DefaultSpawnPointName;
 
         return null != AuthenticatedUser;
     }
@@ -93,16 +95,25 @@ public class GameStateManager : Singleton<GameStateManager>
         if (AuthenticatedUser == null)
             throw new ApplicationException("Could not load last saved game because user is not authenitcated.");
 
-        var gameState = DbManager.GetLastGameSave(AuthenticatedUser.Login);
+        var gameState = dbManager.GetLastGameSave(AuthenticatedUser.Login);
         if (gameState == null)
             throw new ApplicationException("Could not load last save game because it is not exist at storage.");
 
-        Player = DbManager.LoadPlayerState(gameState.Id);
+        Player = dbManager.LoadPlayerState(gameState.Id);
         if (Player == null)
             throw new ApplicationException("Could not load last save game because player is not exist at storage.");
 
         // todo: load Characters, Loots, and Facilities for saved game
         // extendedGameState = DbManager.LoadPlayerState(gameState.Id);
+
+        // Prepare current scene
+        SetActiveScene(gameState.CurrentSceneId);
+        LoadSceneState(gameState.CurrentSceneId);
+
+        // Reset spawn point because saved player position should be used.
+        ActiveSpawnPoint = (Player.Position.X == 0 && Player.Position.Y == 0 ?
+            GeneralName.DefaultSpawnPointName :
+            string.Empty);
     }
 
     /// <summary>
@@ -114,7 +125,7 @@ public class GameStateManager : Singleton<GameStateManager>
             throw new ApplicationException("Could not save game because user is not authenticated.");
 
         // save game state
-        DbManager.SaveGame(AuthenticatedUser.Login, ActiveScene.Id, Player, extendedGameState);
+        dbManager.SaveGame(AuthenticatedUser.Login, ActiveScene.Id, Player, extendedGameState);
 
         ResetGameExceptCurrentScene();
     }
@@ -125,19 +136,19 @@ public class GameStateManager : Singleton<GameStateManager>
     /// <param name="sceneId">scene identifier</param>
     public void SetActiveScene(string sceneId)
     {
-        ActiveScene = DbManager.LoadSceneDefenition(sceneId);
+        ActiveScene = dbManager.LoadSceneDefenition(sceneId);
 
         if (ActiveScene == null)
             throw new ApplicationException(string.Format("Could not find a scene with id: {0}", sceneId));
     }
 
     /// <summary>
-    /// Load scene state from storage
+    /// Load scene state from storage.
     /// </summary>
     /// <param name="sceneId">scene identifier</param>
     public void LoadSceneState(string sceneId)
     {
-        // todo: update extended state for scene objects
+        // todo: update game extended state for specified scene
     }
 
     /// <summary>

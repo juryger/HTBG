@@ -7,34 +7,8 @@ using UnityEngine.UI;
 /// </summary>
 public class SceneView : MonoBehaviour, IView
 {
-    ///////// <summary>
-    ///////// Scene identifier.
-    ///////// </summary>
-    //////public string SceneId;
-
-    ///////// <summary>
-    ///////// Scene name.
-    ///////// </summary>
-    //////public string SceneName;
-
-    ///////// <summary>
-    ///////// Scene command hints.
-    ///////// </summary>
-    //////public string[] SceneCommandHints;
-
-    /// <summary>
-    /// Scene spawn points.
-    /// </summary>
-    public string[] SceneSpawnPoints;
-
     public void Start()
     {
-        //////var commandHints = GameObject.Find("SceneCommandHintsText");
-        //////if (commandHints != null)
-        //////{
-        //////    var textComponent = commandHints.GetComponent<Text>();
-        //////    textComponent.text = String.Join(" | ", SceneCommandHints ?? new string[] { });
-        //////}
     }
 
     /// <summary>

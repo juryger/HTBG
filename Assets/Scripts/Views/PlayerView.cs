@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Unity script for player object.
@@ -72,14 +73,28 @@ public class PlayerView : MonoBehaviour, IView
                 inputY = 0f;
                 break;
             case NotificationName.PlayerStatisticsChanged:
-                //View.Notify(eventPath, source, Model.Statistics);
+                var healthObject = GameObject.FindGameObjectWithTag(UnityObjectTagName.HealthBar);
+                var staminaObject = GameObject.FindGameObjectWithTag(UnityObjectTagName.StaminaBar);
+
+                if (healthObject != null)
+                    SetSliderValue(healthObject, (int)data[2]);
+
+                if (staminaObject)
+                    SetSliderValue(staminaObject, (int)data[3]);
                 break;
             case NotificationName.RequestPlayerPosition:
-                ViewModel.Notify(NotificationName.ResponsePlayerPosition, rbody.position.x, rbody.position.y);
+                ViewModel.Notify(NotificationName.ResponsePlayerPosition, this, rbody.position.x, rbody.position.y);
                 break;
             default:
                 break;
         }
+    }
+
+    private void SetSliderValue(GameObject gameObject, int value)
+    {
+        var slider = gameObject.GetComponent<Slider>();
+        if (slider != null)
+            slider.value = value;
     }
 
     public void SetViewModel(BaseViewModel viewModel)

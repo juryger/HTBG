@@ -1,5 +1,4 @@
-﻿using System;
-/// <summary>
+﻿/// <summary>
 /// Represent inventory store for characters of the game.
 /// </summary>
 public class InventoryModel : ThingModel
@@ -24,7 +23,14 @@ public class InventoryModel : ThingModel
 
     public override T ConvertToDTO<T>(params object[] data)
     {
-        throw new NotImplementedException();
+        return new InventoryDTO()
+        {
+            InventoryId = Id,
+            InventoryType = InventoryType,
+            Name = Name,
+            CommandHint = CommandHint,
+
+        } as T;
     }
 
     protected override void Dispose(bool disposing)

@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -30,12 +31,15 @@ public class MainMenuView : MonoBehaviour, IView
                 if (user == null)
                     NavigateToMainMenuScreen(MainMenuScreen.AuthenticationMenuScreen);
                 else
-                    NavigateToMainMenuScreen(MainMenuScreen.ExistingPlayerGameMenuScreen);
+                    NavigateToMainMenuScreen(MainMenuScreen.GamePauseMenuScreen);
 
                 break;
             case NotificationName.NotifyViewUserAuthenticationFailed:
             case NotificationName.NotifyUserRegisterFailed:
                 SetValidationMessage(data[0].ToString());
+                break;
+            case NotificationName.NotifyGameSavedSuccessfully:
+                ResumeGame();
                 break;
         }
     }
@@ -87,7 +91,7 @@ public class MainMenuView : MonoBehaviour, IView
             }
         }
 
-        // authenticate user in Database
+        // authenticate user
         ViewModel.Notify(NotificationName.LoginExistingUser, this, login, password);
     }
 
@@ -132,16 +136,17 @@ public class MainMenuView : MonoBehaviour, IView
         if (genderDropDown != null && genderDropDown.name == "GenderDropdown")
             gender = (CharacterGender)genderDropDown.value;
 
-        // todo: register user in Database
+        // register user
         ViewModel.Notify(NotificationName.RegisterNewUser, this, login, password, age, ((int)gender).ToString());
     }
 
     public void LogoutUser()
     {
-        // logout user
-        GameStateManager.Instance.LogoutUser();
+        SetValidationMessage(string.Empty);
 
         ViewModel.Notify(NotificationName.LogoutUser, this);
+
+        Time.timeScale = 1.0f;
     }
 
     /// <summary>
@@ -149,15 +154,21 @@ public class MainMenuView : MonoBehaviour, IView
     /// </summary>
     public void LoadLastSavedGame()
     {
-        GameStateManager.Instance.LoadLastSavedGame();
+        SetValidationMessage(string.Empty);
+
+        ViewModel.Notify(NotificationName.LoadLastSavedGame, this);
+
+        ResumeGame();
     }
 
     /// <summary>
-    /// Load last save game command handler.
+    /// Save game command handler.
     /// </summary>
-    public void SavedGame()
+    public void SaveGame()
     {
-        GameStateManager.Instance.SaveGame();
+        SetValidationMessage(string.Empty);
+
+        ViewModel.Notify(NotificationName.SaveGame, this);
     }
 
     /// <summary>
@@ -239,4 +250,11 @@ public class MainMenuView : MonoBehaviour, IView
         }
     }
 
+    public void ResumeGame()
+    {
+        Time.timeScale = 1.0f;
+
+        // load main menu in additive mode
+        SceneManager.UnloadScene(SceneName.MainMenu);
+    }
 }
