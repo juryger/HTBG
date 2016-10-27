@@ -59,6 +59,12 @@ public class DataService
 
         var dbPath = filepath;
 #endif
+        var fi = new FileInfo(dbPath);
+        if (!fi.Directory.Exists)
+        {
+            Directory.CreateDirectory(fi.Directory.FullName);
+        }
+
         var dbExist = File.Exists(dbPath);
 
         _connection = new SQLiteConnection(dbPath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
@@ -290,7 +296,7 @@ public class DataService
         var gameState = new GameStateModel(
             Guid.NewGuid().ToString(),
             login,
-            GeneralName.InitialGameSceneId,
+            sceneId,
             string.Format("Save for {0} at {1}", login, created.ToLocalTime()),
             created);
         var gameStateDto = gameState.ConvertToDTO<GameStateDTO>();

@@ -19,6 +19,9 @@ public class GameStateManager : Singleton<GameStateManager>
 
         // create connection to local database
         dbManager = new DataService(GeneralName.LocalDatabaseName);
+
+        if (dbManager == null)
+            throw new ApplicationException("Unable to connect to database: " + GeneralName.LocalDatabaseName);
     }
 
     /// <summary>
