@@ -254,7 +254,7 @@ public class MainMenuView : MonoBehaviour, IView
     {
         Time.timeScale = 1.0f;
 
-        // load main menu in additive mode
+        // unload main menu
         SceneManager.UnloadScene(SceneName.MainMenu);
     }
 }

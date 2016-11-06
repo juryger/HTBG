@@ -6,7 +6,8 @@ public class SceneName
     public const string SkeletonInnSuburbs = "SkeletonInnSuburbs";
     public const string SkeletonInn = "SkeletonInn";
     public const string GlobalMap = "WorldMap";
-    public const string MainMenu = "StartGame";
+    public const string MainMenu = "MainMenu";
+    public const string StartGame = "StartGame";
 
     protected SceneName()
     {

@@ -55,7 +55,7 @@ public class MainMenuViewModel : BaseViewModel
                 GameStateManager.Instance.LogoutUser();
 
                 // navigate to main menu scene (because current scene is gameplay scene with additive menu scene)
-                SceneManager.LoadScene(SceneName.MainMenu);
+                SceneManager.LoadScene(SceneName.StartGame);
 
                 break;
             case NotificationName.LoadLastSavedGame:
