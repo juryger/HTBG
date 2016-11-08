@@ -11,9 +11,7 @@
         Notify(NotificationName.NotifyViewSyncState,
             this,
             GameStateManager.Instance.ActiveScene.Name,
-            GameStateManager.Instance.ActiveScene.CommandHints.Replace(";", " | "),
-            GameStateManager.Instance.Player.Statistics.CurrentHealth,
-            GameStateManager.Instance.Player.Statistics.CurrentStamina);
+            GameStateManager.Instance.ActiveScene.CommandHints.Replace(";", " | "));
     }
 
     public override void Notify(string eventPath, object source, params object[] data)

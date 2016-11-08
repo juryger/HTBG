@@ -3,10 +3,11 @@
 /// </summary>
 public class CharacterModel : ThingModel
 {
-    public CharacterModel(string id, string name, string commandHint, CharacterKind kind, int age, CharacterGender gender,
+    public CharacterModel(string id, string name, string commandHint, CharacterKind kind, string sceneId, int age, CharacterGender gender,
         CharacterStatisticsModel statistics, InventoryModel inventory) :
         base(id, name, commandHint)
     {
+        SceneId = sceneId;
         Age = age;
         Gender = gender;
         CharacterType = kind;
@@ -18,11 +19,19 @@ public class CharacterModel : ThingModel
     }
 
     // specific properties here
+    public string SceneId { get; internal set; }
     public int Age { get; internal set; }
     public CharacterGender Gender { get; internal set; }
     public CharacterKind CharacterType { get; internal set; }
     public CharacterStatisticsModel Statistics { get; internal set; }
     public InventoryModel Inventory { get; internal set; }
+
+    public override void SetViewModel(BaseViewModel viewModel)
+    {
+        base.SetViewModel(viewModel);
+
+        SyncStatistics();
+    }
 
     public override T ConvertToDTO<T>(params object[] data)
     {
@@ -31,7 +40,7 @@ public class CharacterModel : ThingModel
         // create initail character for user
         var characterDto = new CharacterDTO()
         {
-            SceneId = data[0].ToString(),
+            SceneId = SceneId,
             CharacterId = Id,
             Name = Name,
             Age = Age,
@@ -51,18 +60,23 @@ public class CharacterModel : ThingModel
         };
 
         result = characterDto as T;
-        if (data.Length > 1)
+        if (data.Length > 0)
         {
             // request current position of player
             ViewModel.Notify(NotificationName.RequestPlayerPosition, this);
 
-            characterDto.LocationX = this.Position.X;
-            characterDto.LocationY = this.Position.Y;
+            characterDto.LocationX = Position.X;
+            characterDto.LocationY = Position.Y;
 
-            result = new CharacterStateDTO(data[1].ToString(), characterDto) as T;
+            result = new CharacterStateDTO(data[0].ToString(), characterDto) as T;
         }
 
         return result;
+    }
+
+    public void SetSceneId(string value)
+    {
+        SceneId = value;
     }
 
     public void SetMovementVector(UnityVector2 vector, bool isRun = false)

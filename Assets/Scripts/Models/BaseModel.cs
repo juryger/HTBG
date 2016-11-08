@@ -20,7 +20,7 @@ public abstract class BaseModel : IDisposable
     /// Set ViewModel for model.
     /// </summary>
     /// <param name="viewModel">ViewModel</param>
-    public void SetViewModel(BaseViewModel viewModel)
+    public virtual void SetViewModel(BaseViewModel viewModel)
     {
         if (ViewModel != null)
             throw new ApplicationException("ViewModel has been already initialized.");
@@ -31,7 +31,7 @@ public abstract class BaseModel : IDisposable
     /// <summary>
     /// Allows to reset ViewModel, because for character who moving between scenes, view recreated each time.
     /// </summary>
-    public void ResetModel()
+    public virtual void ResetModel()
     {
         ViewModel = null;
     }

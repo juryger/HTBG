@@ -18,10 +18,16 @@ public class GameSceneLoader : MonoBehaviour
     void Start()
     {
         // Load Scene state
-        PrepareSceneState();
+        InitializeScene();
 
         // Create main player for the scene
-        PrepareMainPlayer();
+        InitializeMainPlayer();
+
+        // Create NPC for the scene
+        InitializeNpcs();
+
+        // Create Loot for the scene
+        InitializeLoot();
     }
 
     void Update()
@@ -46,7 +52,7 @@ public class GameSceneLoader : MonoBehaviour
         }
     }
 
-    private void PrepareSceneState()
+    private void InitializeScene()
     {
         Debug.Log("Loading state for scene: " + SceneManager.GetActiveScene().name);
 
@@ -59,7 +65,7 @@ public class GameSceneLoader : MonoBehaviour
 
         GameStateManager.Instance.SetActiveScene(SceneId);
 
-        // load scene state from storage
+        // upadte scene state from storage
         GameStateManager.Instance.LoadSceneState(SceneId);
 
         var hud = GameObject.FindGameObjectWithTag("HUD");
@@ -71,9 +77,13 @@ public class GameSceneLoader : MonoBehaviour
         }
     }
 
-    private void PrepareMainPlayer()
+    private void InitializeMainPlayer()
     {
-        var prefab = Resources.Load<GameObject>("Prefabs/MainPlayer");
+        var playerPrefabName =
+            GameStateManager.Instance.Player.Gender == CharacterGender.Male ?
+                "Prefabs/MainPlayerMale" :
+                "Prefabs/MainPlayerFemale";
+        var prefab = Resources.Load<GameObject>(playerPrefabName);
         var instance = Instantiate(prefab);
         instance.name = "MainPlayer";
 
@@ -102,8 +112,42 @@ public class GameSceneLoader : MonoBehaviour
             playerPosition = spawnPoint.transform.position;
         }
 
-        // set main player position
+        // update main player position and scene
+        model.SceneId = SceneId;
         model.SetPosition(
             new UnityPosition(playerPosition.x, playerPosition.y, playerPosition.z));
+
+        // ceneter camera for WorldMap scene
+        if (GameStateManager.Instance.ActiveScene.Name == SceneName.WorldMap)
+        {
+            var centerPoint = GameObject.Find(GeneralName.WorldMapCenterPointName);
+            if (centerPoint != null)
+            {
+                var cameraObj = GameObject.Find(GeneralName.MainCameraName);
+                if (cameraObj != null)
+                {
+                    var camera = cameraObj.GetComponent<Camera>();
+                    var cameraScript = camera.GetComponent(typeof(CameraFollow)) as CameraFollow;
+                    cameraScript.followTartget = false;
+
+                    camera.orthographicSize = 530f;
+                    camera.transform.position =
+                        Vector3.Lerp(centerPoint.transform.position, centerPoint.transform.position, 0.1f) +
+                        new Vector3(0, 0, -0.9f);
+                }
+            }
+        }
+    }
+
+    private void InitializeNpcs()
+    {
+        // load npcs state
+
+    }
+
+    private void InitializeLoot()
+    {
+        // load loot state
+
     }
 }

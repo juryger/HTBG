@@ -23,8 +23,6 @@ public class SceneView : MonoBehaviour, IView
             case NotificationName.NotifyViewSyncState:
                 var sceneTitleText = GameObject.Find("SceneTitleText");
                 var commandHintsText = GameObject.Find("SceneCommandHintsText");
-                var healthObject = GameObject.FindGameObjectWithTag(UnityObjectTagName.HealthBar);
-                var staminaObject = GameObject.FindGameObjectWithTag(UnityObjectTagName.StaminaBar);
 
                 if (sceneTitleText != null)
                 {
@@ -37,13 +35,8 @@ public class SceneView : MonoBehaviour, IView
                     var textComponent = commandHintsText.GetComponent<Text>();
                     textComponent.text = (string)data[1];
                 }
-
-                if (healthObject != null)
-                    SetSliderValue(healthObject, (int)data[2]);
-
-                if (staminaObject)
-                    SetSliderValue(staminaObject, (int)data[3]);
-
+                break;
+            default:
                 break;
         }
     }
@@ -54,13 +47,6 @@ public class SceneView : MonoBehaviour, IView
             throw new ApplicationException("ViewModel has been already initialized.");
 
         ViewModel = viewModel;
-    }
-
-    private void SetSliderValue(GameObject gameObject, int value)
-    {
-        var slider = gameObject.GetComponent<Slider>();
-        if (slider != null)
-            slider.value = value;
     }
 
     public void Dispose()

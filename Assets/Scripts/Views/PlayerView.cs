@@ -76,11 +76,13 @@ public class PlayerView : MonoBehaviour, IView
                 var healthObject = GameObject.FindGameObjectWithTag(UnityObjectTagName.HealthBar);
                 var staminaObject = GameObject.FindGameObjectWithTag(UnityObjectTagName.StaminaBar);
 
+                var statistics = data[0] as CharacterStatisticsModel;
+
                 if (healthObject != null)
-                    SetSliderValue(healthObject, (int)data[2]);
+                    SetSliderValue(healthObject, statistics.CurrentHealth);
 
                 if (staminaObject)
-                    SetSliderValue(staminaObject, (int)data[3]);
+                    SetSliderValue(staminaObject, statistics.CurrentStamina);
                 break;
             case NotificationName.RequestPlayerPosition:
                 ViewModel.Notify(NotificationName.ResponsePlayerPosition, this, rbody.position.x, rbody.position.y);

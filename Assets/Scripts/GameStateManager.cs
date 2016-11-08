@@ -93,6 +93,22 @@ public class GameStateManager : Singleton<GameStateManager>
     /// <summary>
     /// Load last saved state of the game from storage.
     /// </summary>
+    public void LoadSceneState(string sceneId)
+    {
+        if (AuthenticatedUser == null)
+            throw new ApplicationException("Could not load last saved game because user is not authenitcated.");
+
+        var gameState = dbManager.GetLastGameSave(AuthenticatedUser.Login);
+        if (gameState == null)
+            throw new ApplicationException("Could not load last save game because it is not exist at storage.");
+
+        // Load Characters, Loots, and Facilities for saved game
+        dbManager.LoadGameState(extendedGameState, gameState.Id, sceneId, AuthenticatedUser.CharacterId);
+    }
+
+    /// <summary>
+    /// Load last saved state of the game from storage.
+    /// </summary>
     public void LoadLastSavedGame()
     {
         if (AuthenticatedUser == null)
@@ -102,16 +118,13 @@ public class GameStateManager : Singleton<GameStateManager>
         if (gameState == null)
             throw new ApplicationException("Could not load last save game because it is not exist at storage.");
 
-        Player = dbManager.LoadPlayerState(gameState.Id);
+        // Load Player, Characters, Loots, and Facilities for saved game
+        Player = dbManager.LoadGameState(extendedGameState, gameState.Id, gameState.CurrentSceneId, AuthenticatedUser.CharacterId);
+
         if (Player == null)
             throw new ApplicationException("Could not load last save game because player is not exist at storage.");
 
-        // todo: load Characters, Loots, and Facilities for saved game
-        // extendedGameState = DbManager.LoadPlayerState(gameState.Id);
-
-        // Prepare current scene
         SetActiveScene(gameState.CurrentSceneId);
-        LoadSceneState(gameState.CurrentSceneId);
 
         // Reset spawn point because saved player position should be used.
         ActiveSpawnPoint = (Player.Position.X == 0 && Player.Position.Y == 0 ?
@@ -130,7 +143,7 @@ public class GameStateManager : Singleton<GameStateManager>
         // save game state
         dbManager.SaveGame(AuthenticatedUser.Login, ActiveScene.Id, Player, extendedGameState);
 
-        ResetGameExceptCurrentScene();
+        ResetGameStateExceptCurrentScene();
     }
 
     /// <summary>
@@ -146,19 +159,10 @@ public class GameStateManager : Singleton<GameStateManager>
     }
 
     /// <summary>
-    /// Load scene state from storage.
+    /// Reset game state for all earlier unloaded scenes excerpt current scene.
     /// </summary>
     /// <param name="sceneId">scene identifier</param>
-    public void LoadSceneState(string sceneId)
-    {
-        // todo: update game extended state for specified scene
-    }
-
-    /// <summary>
-    /// Reset game state for unloaded scene.
-    /// </summary>
-    /// <param name="sceneId">scene identifier</param>
-    private void ResetGameExceptCurrentScene()
+    private void ResetGameStateExceptCurrentScene()
     {
         // todo: update extended state for scene objects
     }

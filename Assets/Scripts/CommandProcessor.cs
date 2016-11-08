@@ -24,14 +24,20 @@ public class CommandProcessor
         {
             case "m":
             case "menu":
+                if (!GameStateManager.Instance.ActiveScene.CommandHints.ToLower().Contains("menu"))
+                    break;
+
                 Time.timeScale = 0;
 
                 // load main menu in additive mode
                 SceneManager.LoadScene(SceneName.MainMenu, LoadSceneMode.Additive);
-
+                strResult = "";
                 break;
             case "p":
             case "pick":
+                if (!GameStateManager.Instance.ActiveScene.CommandHints.ToLower().Contains("pick"))
+                    break;
+
                 if (parts.Length == 1)
                     break;
 
@@ -45,6 +51,9 @@ public class CommandProcessor
                 break;
             case "g":
             case "go":
+                if (!GameStateManager.Instance.ActiveScene.CommandHints.ToLower().Contains("go"))
+                    break;
+
                 if (parts.Length == 1)
                     break;
 
@@ -72,6 +81,9 @@ public class CommandProcessor
                 break;
             case "r":
             case "run":
+                if (!GameStateManager.Instance.ActiveScene.CommandHints.ToLower().Contains("run"))
+                    break;
+
                 if (parts.Length == 1)
                     break;
 
@@ -99,6 +111,9 @@ public class CommandProcessor
                 break;
             case "t":
             case "turn":
+                if (!GameStateManager.Instance.ActiveScene.CommandHints.ToLower().Contains("turn"))
+                    break;
+
                 if (parts.Length == 1)
                     break;
 
@@ -130,15 +145,24 @@ public class CommandProcessor
                 break;
             case "h":
             case "hault":
+                if (!GameStateManager.Instance.ActiveScene.CommandHints.ToLower().Contains("hault"))
+                    break;
+
                 strResult = "Got Hault";
 
                 GameStateManager.Instance.Player.SetMovementVector(new UnityVector2(0, 0));
                 break;
             case "a":
             case "action":
+                if (!GameStateManager.Instance.ActiveScene.CommandHints.ToLower().Contains("action"))
+                    break;
+
                 break;
             case "v":
             case "visit":
+                if (!GameStateManager.Instance.ActiveScene.CommandHints.ToLower().Contains("visit"))
+                    break;
+
                 if (parts.Length == 1)
                     break;
 

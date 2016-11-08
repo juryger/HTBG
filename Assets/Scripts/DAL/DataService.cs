@@ -161,8 +161,8 @@ public class DataService
             return null;
 
         // Create new character 
-        var character = GameEnvironmentManager.CreatePlayer(login, String.Empty, age, gender);
-        var characterDto = character.ConvertToDTO<CharacterDTO>(GeneralName.InitialGameSceneId);
+        var character = GameEnvironmentManager.CreatePlayer(login, "Talk (t)", GeneralName.InitialGameSceneId, age, gender);
+        var characterDto = character.ConvertToDTO<CharacterDTO>();
 
         // Get inventory for character
         var inventoryDto = character.Inventory.ConvertToDTO<InventoryDTO>();
@@ -249,12 +249,13 @@ public class DataService
     /// <summary>
     /// Load player state.
     /// </summary>
-    /// <param name="gameStateId">game save identifier</param>
+    /// <param name="gameStateId">saved game identifier</param>
+    /// <param name="playerId">player identifier</param>
     /// <returns>character model</returns>
-    public CharacterModel LoadPlayerState(string gameStateId)
+    public CharacterModel LoadPlayerState(string gameStateId, string playerId)
     {
         var playerDto = _connection.Table<CharacterStateDTO>()
-            .Where(c => c.GameStateId == gameStateId)
+            .Where(c => c.GameStateId == gameStateId && c.CharacterId == playerId)
             .FirstOrDefault();
 
         if (playerDto == null)
@@ -273,12 +274,36 @@ public class DataService
     /// <summary>
     /// Load game state.
     /// </summary>
-    /// <param name="user">authenticated user</param>
-    /// <param name="player">player state</param>
+    /// <param name="gameState">current state of the game</param>
+    /// <param name="gameStateId">saved game identifier</param>
+    /// <param name="sceneId">current scene identifier</param>
+    /// <param name="playerId">player identifier</param>
     /// <returns></returns>
-    public ExtendedGameState LoadGameState(string gameStateId)
+    public CharacterModel LoadGameState(ExtendedGameState gameState, string gameStateId, string sceneId, string playerId)
     {
-        throw new NotImplementedException();
+        var charactersDto = _connection.Table<CharacterStateDTO>()
+            .Where(c => c.GameStateId == gameStateId && c.SceneId == sceneId);
+
+        CharacterModel player = null;
+
+        foreach (var itemDto in charactersDto)
+        {
+            var inventoryDto = _connection.Table<InventoryDTO>()
+                .Where(i => i.InventoryId == itemDto.InventoryId)
+                .FirstOrDefault();
+
+            // todo: load loot itmes for current inventory
+
+            var character = itemDto.ConvertToModel<CharacterModel>(
+                    inventoryDto.ConvertToModel<InventoryModel>());
+
+            gameState.AddCharacter(character);
+
+            if (character.Id == playerId)
+                player = character;
+        }
+
+        return player;
     }
 
     /// <summary>
@@ -304,7 +329,6 @@ public class DataService
         // Create main character safe point state
         var gameStateCharacterDto =
             player.ConvertToDTO<CharacterStateDTO>(
-                sceneId,
                 gameStateDto.GameStateId);
 
         // todo: save all objects to Database in transaction

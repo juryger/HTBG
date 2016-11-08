@@ -11,10 +11,11 @@ internal abstract class CharacterCreator
     /// </summary>
     /// <param name="name">name of a character</param>
     /// <param name="commandHint">command for interacting with a character</param>
+    /// <param name="sceneId">scene identifier where player is located</param>
     /// <param name="age">age of character</param>
     /// <param name="gender">gender of a character</param>
     /// <returns>character</returns>
-    public abstract CharacterModel CreatCharacter(string name, string commandHint, int age, CharacterGender gender);
+    public abstract CharacterModel CreatCharacter(string name, string commandHint, string sceneId, int age, CharacterGender gender);
 
     protected int CalculateDamageLevel(int age, CharacterGender gender)
     {
@@ -159,7 +160,7 @@ internal abstract class CharacterCreator
 /// </summary>
 internal class PlayerCreator : CharacterCreator
 {
-    public override CharacterModel CreatCharacter(string name, string commandHint, int age, CharacterGender gender)
+    public override CharacterModel CreatCharacter(string name, string commandHint, string sceneId, int age, CharacterGender gender)
     {
         var statistics = new CharacterStatisticsModel(
             0,
@@ -177,6 +178,7 @@ internal class PlayerCreator : CharacterCreator
             name,
             commandHint,
             CharacterKind.Player,
+            sceneId,
             age,
             gender,
             statistics,
@@ -189,7 +191,7 @@ internal class PlayerCreator : CharacterCreator
 /// </summary>
 internal class NpcCreator : CharacterCreator
 {
-    public override CharacterModel CreatCharacter(string name, string commandHint, int age, CharacterGender gender)
+    public override CharacterModel CreatCharacter(string name, string commandHint, string sceneId, int age, CharacterGender gender)
     {
         throw new NotImplementedException();
     }
@@ -200,7 +202,7 @@ internal class NpcCreator : CharacterCreator
 /// </summary>
 internal class LowRankEnemyCreator : CharacterCreator
 {
-    public override CharacterModel CreatCharacter(string name, string commandHint, int age, CharacterGender gender)
+    public override CharacterModel CreatCharacter(string name, string commandHint, string sceneId, int age, CharacterGender gender)
     {
         throw new NotImplementedException();
     }
@@ -211,7 +213,7 @@ internal class LowRankEnemyCreator : CharacterCreator
 /// </summary>
 internal class LieutenantEnemyCreator : CharacterCreator
 {
-    public override CharacterModel CreatCharacter(string name, string commandHint, int age, CharacterGender gender)
+    public override CharacterModel CreatCharacter(string name, string commandHint, string sceneId, int age, CharacterGender gender)
     {
         throw new NotImplementedException();
     }

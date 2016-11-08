@@ -22,4 +22,9 @@ public class InventoryItem
     /// Instance of loot related with this inventory item.
     /// </summary>
     public LootModel LootItem { get; private set; }
+
+    /// <summary>
+    /// Count of loot item in inventory.
+    /// </summary>
+    public int Count { get; private set; }
 }

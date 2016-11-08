@@ -110,7 +110,7 @@
     <Compile Include="Assets\Scripts\Models\CharacterStatisticsModel.cs" />
     <Compile Include="Assets\Scripts\Models\CommandModel.cs" />
     <Compile Include="Assets\Scripts\Models\FacilityModel.cs" />
-    <Compile Include="Assets\Scripts\Models\GameState.cs" />
+    <Compile Include="Assets\Scripts\Models\ExtendedGameState.cs" />
     <Compile Include="Assets\Scripts\Models\GameStateModel.cs" />
     <Compile Include="Assets\Scripts\Models\IEnumerable.cs" />
     <Compile Include="Assets\Scripts\Models\InventoryItem.cs" />

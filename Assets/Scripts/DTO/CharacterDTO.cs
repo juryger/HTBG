@@ -41,6 +41,7 @@ public class CharacterDTO : BaseDTO
             Name,
             CommandHint,
             CharacterType,
+            SceneId,
             Age,
             Gender,
             new CharacterStatisticsModel(

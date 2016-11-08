@@ -3,8 +3,9 @@
 //[RequireComponent(typeof(Camera))]
 public class CameraFollow : MonoBehaviour
 {
+    public bool followTartget = true;
+
     public Transform target;
-    //private Camera myCamera;
 
     // Use this for initialization
     void Start()
@@ -17,7 +18,7 @@ public class CameraFollow : MonoBehaviour
     {
         //myCamera.orthographicSize = (Screen.height / 100f) / 4f;
 
-        if (target)
+        if (target && followTartget)
         {
             transform.position = Vector3.Lerp(transform.position, target.position, 0.1f) + new Vector3(0, 0, -0.9f);
         }

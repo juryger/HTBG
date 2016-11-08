@@ -451,6 +451,21 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114000013796911542, guid: 6a44d7d3f27b8f748bad4de97948dea8,
+        type: 2}
+      propertyPath: SceneId
+      value: C2D30875-49D5-4DF0-9EBB-F1B1C7A76C93
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000013415196890, guid: 6a44d7d3f27b8f748bad4de97948dea8,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 0.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000013415196890, guid: 6a44d7d3f27b8f748bad4de97948dea8,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6a44d7d3f27b8f748bad4de97948dea8, type: 2}
   m_IsPrefabParent: 0

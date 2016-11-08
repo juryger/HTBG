@@ -8,7 +8,6 @@ public class InventoryModel : ThingModel
     {
         MaxInventoryItems = 9;
         InventoryType = kind;
-
     }
 
     /// <summary>
@@ -29,7 +28,6 @@ public class InventoryModel : ThingModel
             InventoryType = InventoryType,
             Name = Name,
             CommandHint = CommandHint,
-
         } as T;
     }
 

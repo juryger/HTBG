@@ -8,13 +8,14 @@ internal static class GameEnvironmentManager
     /// </summary>
     /// <param name="name">name of the character</param>
     /// <param name="commandHint">command hint for interaction with this character</param>
+    /// <param name="sceneId">scene identifier where player is located</param>
     /// <param name="age">age of the character</param>
     /// <param name="gender">gender of the character</param>
     /// <returns>player model</returns>
-    public static CharacterModel CreatePlayer(string name, string commandHint, int age, CharacterGender gender)
+    public static CharacterModel CreatePlayer(string name, string commandHint, string sceneId, int age, CharacterGender gender)
     {
         var characterCreator = new PlayerCreator();
 
-        return characterCreator.CreatCharacter(name, commandHint, age, gender);
+        return characterCreator.CreatCharacter(name, commandHint, sceneId, age, gender);
     }
 }
