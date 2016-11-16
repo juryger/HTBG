@@ -5066,6 +5066,8 @@ MonoBehaviour:
     m_Options:
     - m_Text: Male
       m_Image: {fileID: 21300036, guid: a058061d47f5e6844beddd9f532df193, type: 3}
+    - m_Text: Femail
+      m_Image: {fileID: 21300214, guid: cbcba430ffbdc064689a46d202a8d5da, type: 3}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -5415,9 +5417,9 @@ RectTransform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1550057356}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1056368583}
@@ -5429,8 +5431,8 @@ RectTransform:
   m_RootOrder: 4
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 240, y: 400}
-  m_SizeDelta: {x: 480, y: 800}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1550057358
 MonoBehaviour:
@@ -6655,7 +6657,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ver 0.2
+  m_Text: Ver 0.3
 --- !u!222 &1912953974
 CanvasRenderer:
   m_ObjectHideFlags: 0

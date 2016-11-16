@@ -31,7 +31,7 @@ public abstract class BaseModel : IDisposable
     /// <summary>
     /// Allows to reset ViewModel, because for character who moving between scenes, view recreated each time.
     /// </summary>
-    public virtual void ResetModel()
+    public virtual void ResetViewModel()
     {
         ViewModel = null;
     }

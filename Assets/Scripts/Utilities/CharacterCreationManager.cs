@@ -123,7 +123,7 @@ internal abstract class CharacterCreator
 
     private AgeCategory GetAgeCategory(int age)
     {
-        var agec = AgeCategory.NonExist;
+        var ageCat = AgeCategory.NonExist;
 
         if (age > 0 && age < 20)
         {
@@ -137,12 +137,12 @@ internal abstract class CharacterCreator
         {
             return AgeCategory.ElderAge;
         }
-        else if (age >= 70 && age < 100)
+        else if (age >= 70)
         {
             return AgeCategory.OldAge;
         }
 
-        return agec;
+        return ageCat;
     }
 
     private enum AgeCategory

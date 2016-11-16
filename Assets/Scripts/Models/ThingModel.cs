@@ -31,17 +31,17 @@ public abstract class ThingModel : BaseModel
     public string CommandHint { get; private set; }
 
     /// <summary>
-    /// Location on the scene
+    /// Location on the scene (setter for change without notification View)
     /// </summary>
     public UnityPosition Position { get; private set; }
 
-    public void SetPosition(UnityPosition pos)
+    public void SetPosition(UnityPosition pos, bool isNotifyView = true)
     {
         Position = pos;
 
-        if (ViewModel != null)
+        if (isNotifyView && ViewModel != null)
         {
-            ViewModel.Notify(NotificationName.PlayerPositionChanged, this, pos);
+            ViewModel.Notify(NotificationName.CharacterPositionChanged, this, pos);
         }
     }
 

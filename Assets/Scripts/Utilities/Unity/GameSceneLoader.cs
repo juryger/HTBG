@@ -63,34 +63,41 @@ public class GameSceneLoader : MonoBehaviour
             throw new ApplicationException("There is not defined a scene identifier for current Scene.");
         }
 
-        GameStateManager.Instance.SetActiveScene(SceneId);
+        var gameManager = GameStateManager.Instance;
+        var activeScene = gameManager.ActiveScene;
+
+        gameManager.SetActiveScene(SceneId);
+
+        // unload game player for previously actve scene
+        if (activeScene != null)
+            gameManager.UnloadSceneMutiplayers(activeScene.Id);
 
         // upadte scene state from storage
-        GameStateManager.Instance.LoadSceneState(SceneId);
+        gameManager.LoadSceneState(SceneId);
 
         var hud = GameObject.FindGameObjectWithTag("HUD");
         if (hud != null)
         {
             var view = hud.GetComponent<SceneView>();
-            var model = GameStateManager.Instance.ActiveScene;
+            var model = gameManager.ActiveScene;
             var viewModel = new SceneViewModel(view, model);
         }
     }
 
     private void InitializeMainPlayer()
     {
+        var player = GameStateManager.Instance.Player;
         var playerPrefabName =
-            GameStateManager.Instance.Player.Gender == CharacterGender.Male ?
+            player.Gender == CharacterGender.Male ?
                 "Prefabs/MainPlayerMale" :
                 "Prefabs/MainPlayerFemale";
         var prefab = Resources.Load<GameObject>(playerPrefabName);
         var instance = Instantiate(prefab);
-        instance.name = "MainPlayer";
+        instance.name = player.Name;
 
         var view = instance.GetComponent<IView>();
-        var model = GameStateManager.Instance.Player;
-        model.ResetModel();
-        var viewModel = new PlayerViewModel(view, model);
+        player.ResetViewModel();
+        var viewModel = new CharacterViewModel(view, player);
 
         var playerPosition = new Vector3();
 
@@ -98,9 +105,9 @@ public class GameSceneLoader : MonoBehaviour
         var spawnPointName = GameStateManager.Instance.ActiveSpawnPoint;
         if (string.IsNullOrEmpty(spawnPointName))
         {
-            playerPosition.x = model.Position.X;
-            playerPosition.y = model.Position.Y;
-            playerPosition.z = model.Position.Z;
+            playerPosition.x = player.Position.X;
+            playerPosition.y = player.Position.Y;
+            playerPosition.z = player.Position.Z;
         }
         else
         {
@@ -113,8 +120,8 @@ public class GameSceneLoader : MonoBehaviour
         }
 
         // update main player position and scene
-        model.SceneId = SceneId;
-        model.SetPosition(
+        player.SceneId = SceneId;
+        player.SetPosition(
             new UnityPosition(playerPosition.x, playerPosition.y, playerPosition.z));
 
         // ceneter camera for WorldMap scene

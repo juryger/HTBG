@@ -9,15 +9,15 @@ public class NotificationName
     public const string NotifyUserRegisterFailed = "notify.view.user.register.failed";
     public const string NotifyGameSavedSuccessfully = "notify.view.game.save.success";
 
-    public const string PlayerPositionChanged = "player.position.changed";
-    public const string PlayerMovementVectorChanged = "player.movement.vector.changed";
-    public const string PlayerMovementHaulted = "player.movement.haulted";
-    public const string PlayerStatisticsChanged = "player.statistics.changed";
+    public const string CharacterPositionChanged = "character.position.changed";
+    public const string CharacterMovementVectorChanged = "character.movement.vector.changed";
+    public const string CharacterMovementHaulted = "character.movement.haulted";
+    public const string CharacterStatisticsChanged = "character.statistics.changed";
 
-    public const string RequestPlayerPosition = "request.player.position";
-    public const string ResponsePlayerPosition = "response.player.position";
+    public const string RequestCharacterPosition = "request.character.position";
+    public const string ResponseCharacterPosition = "response.character.position";
 
-    public const string SceneNameUpdated = "scene.name.update";
+    public const string RemoveCharacterFromScene = "character.remove.from.scene";
 
     public const string CommandInputEntered = "command.input.entered";
     public const string LoginExistingUser = "command.auth.login";

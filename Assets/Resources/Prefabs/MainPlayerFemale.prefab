@@ -185,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d8a0f786dd8a034bbcff9dcfcbbb664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsMultiplayer: 0
 --- !u!114 &114000013153808270
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -196,6 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf85e5c1e349304497aa3cd60056519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  followTartget: 1
   target: {fileID: 4000014079665354}
 --- !u!124 &124000014165994882
 Behaviour:

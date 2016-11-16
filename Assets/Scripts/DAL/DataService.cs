@@ -194,11 +194,6 @@ public class DataService
         if (characterDto == null)
             throw new ArgumentNullException("characterDto");
 
-        // Get character for user
-        //////var characterDto = _connection.Table<CharacterDTO>()
-        //////    .Where(c => c.CharacterId == user.CharacterId)
-        //////    .First();
-
         // Create game safe point
         var created = DateTime.UtcNow;
         var gameState = new GameStateModel(
@@ -328,8 +323,7 @@ public class DataService
 
         // Create main character safe point state
         var gameStateCharacterDto =
-            player.ConvertToDTO<CharacterStateDTO>(
-                gameStateDto.GameStateId);
+            player.ConvertToDTO<CharacterStateDTO>(gameStateDto.GameStateId);
 
         // todo: save all objects to Database in transaction
         _connection.Insert(gameStateDto);

@@ -30,7 +30,8 @@ public class LoadNewArea : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.name == "MainPlayer")
+        var player = other.gameObject.GetComponent(typeof(PlayerView));
+        if (player != null && false == ((PlayerView)player).IsMultiplayer)
         {
             // set active spawn point at new scene
             GameStateManager.Instance.SetActiveSpawnPoint(DestinationSpawnPoint);
